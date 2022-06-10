@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="row text-center">
+        <img id="img" class="mb-4 pt-4" src="../../../assets/cruzVerde.jpg" alt="">
+        <div *ngIf="!islogged">
+            <div class="col-12">
+                <button type="button" class="btn btn-lg btn-success m-4" (click)="goIngreso()">Entrar</button>   
+            </div>
+            <div class="col-12">
+                <button type="button" class="btn btn-lg btn-success m-4" (click)="goRegistro()">Registrarse</button>
+            </div>
+        </div>
+    </div>
+</div>

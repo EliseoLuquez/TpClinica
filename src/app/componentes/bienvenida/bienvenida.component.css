@@ -1,0 +1,7 @@
+#img{
+    height: 200px;
+    width: 200px;
+    display:block;
+    margin:auto;
+    /*background-image: url('../../../assets/ahorcado/ahorcado.jpg');*/
+}

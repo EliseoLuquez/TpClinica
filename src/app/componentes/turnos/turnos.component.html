@@ -1,0 +1,3 @@
+<!--FALTA FILTRO ESPECIALIDAD ESPECIALISTA-->
+<app-tabla-turnos [turnos]="turnosOcupados" (turnoSeleccionado)="asignarTurno($event)"></app-tabla-turnos>
+<app-turno-detalle *ngIf="turnoSeleccionado" [turnoDetalle]="turnoSeleccionado"></app-turno-detalle>

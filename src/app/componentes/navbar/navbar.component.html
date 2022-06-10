@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-success rounded">
+    <a class="navbar-brand text-light" href="#">Clinica</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample09"
+        aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div *ngIf="usuario$ | async as usuario; else login">
+        <a class="btn text-light" (click)="goBienvenida()">Bienvenida</a>
+        <a class="btn text-light" (click)="goSeccionUsuarios()">Sección Usuarios</a>
+        <a class="py-2 d-none d-md-inline-block btn" *ngIf="usuario">{{usuario?.email}}</a>
+        <a class="btn text-light" (click)="goSolicitarTurno()" *ngIf="adminLogueado || pacienteLogueado">Solicitar Turno</a>
+        <a class="btn text-light" (click)="goMisTurnos()" *ngIf="especialistaLogueado || pacienteLogueado">Mis Turnos</a>
+        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="onLogout()" *ngIf="usuario">Logout</a>
+        
+      </div>
+      <ng-template #login>
+        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="goRegistro()">Registro</a>
+        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="goLogin()">Login</a>
+      </ng-template>
+</nav>

@@ -1,0 +1,5 @@
+<!--FALTA FILTRO ESPECIALIDAD ESPECIALISTA-->
+<input class="form-control" [(ngModel)]='filter' ng-blur="ngBlur()">
+
+<app-tabla-turnos [turnos]="turnosOcupados" (turnoSeleccionado)="asignarTurno($event)"></app-tabla-turnos>
+<app-turno-detalle *ngIf="turnoSeleccionado" [turnoDetalle]="turnoSeleccionado"></app-turno-detalle>
