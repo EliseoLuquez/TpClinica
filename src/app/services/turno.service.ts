@@ -55,4 +55,24 @@ export class TurnoService {
     const tutorialsRef = this.db.collection(this.dbPathTurnos);
     tutorialsRef.doc(turno.id).update(turno);
   }
+
+  updateTurnoEstado(turno: Turno) {
+    const tutorialsRef = this.db.collection(this.dbPathTurnos);
+    tutorialsRef.doc(turno.id).update({estado: turno.estado});
+  }
+
+  updateTurnoEstadoComentariosPaciente(turno: Turno) {
+    const tutorialsRef = this.db.collection(this.dbPathTurnos);
+    tutorialsRef.doc(turno.id).update({estado: turno.estado, comentariosPaciente: turno.comentariosPaciente});
+  }
+
+  updateTurnoEstadoComentariosEspecialista(turno: Turno) {
+    const tutorialsRef = this.db.collection(this.dbPathTurnos);
+    tutorialsRef.doc(turno.id).update({estado: turno.estado, comentariosEspecialista: turno.comentariosEspecialista});
+  }
+
+  updateTurnoEstadoComentariosAdmin(turno: Turno) {
+    const tutorialsRef = this.db.collection(this.dbPathTurnos);
+    tutorialsRef.doc(turno.id).update({estado: turno.estado, comentariosAdmin: turno.comentariosAdmin});
+  }
 }

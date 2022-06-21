@@ -2,18 +2,35 @@
     <div class="row">
         <div class="col-12">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Detalle Turno</h2>
+                <h2>Turno</h2>
                 <span class="badge badge-secondary badge-pill">3</span>
             </h4>
             <div class="row">
-                <div class="form-group col-md-4">
-                    <h6>Fecha-Hora: {{turnoDetalle.fecha}} - {{turnoDetalle.hora}}</h6>
-                    <h6>Paciente: {{turnoDetalle.paciente}}</h6>
-                    <h6>Especialista: {{turnoDetalle.especialista.nombre}} {{turnoDetalle.especialista.apellido}}</h6>
-                    <h6>Especialidad: {{turnoDetalle.especialidad}}</h6>
-                    <h6>Comentarios Paciente: {{turnoDetalle.comentariosPaciente}}</h6>
-                    <h6>Comentarios Especialista: {{turnoDetalle.comentariosEspecialista}}</h6>
-                    <h6>Estado: {{turnoDetalle.estado}}</h6>
+                <div class="form-group col-md-6">
+                    <h4>Fecha-Hora: {{turnoDetalle.fecha}} - {{turnoDetalle.hora}}</h4>
+                    <h4>Paciente: {{turnoDetalle.paciente.nombre}} {{turnoDetalle.paciente.apellido}}</h4>
+                    <h4>Especialista: {{turnoDetalle.especialista.nombre}} {{turnoDetalle.especialista.apellido}}</h4>
+                    <h4>Especialidad: {{turnoDetalle.especialidad.nombre}}</h4>
+                    <h4>Estado: {{turnoDetalle.estado}}</h4>
+                    <div *ngIf="usuario.especialista">
+                        <div *ngIf="turnoDetalle.estado == 'REALIZADO'" class="form-group">
+                            <h4 *ngIf="turnoDetalle.estado == 'REALIZADO' || turnoDetalle.estado == 'CANCELADO'">
+                                Comentarios Especialista: {{turnoDetalle.comentariosEspecialista}}</h4>
+                            <textarea *ngIf="usuario.especialista" class="form-control"
+                                [(ngModel)]="nuevoComentarioEspecialista"
+                                placeholder="Deje un comentario..."></textarea>
+                            <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                        </div>
+                    </div>
+                    <div *ngIf="usuario.paciente">
+                        <div *ngIf="turnoDetalle.estado == 'REALIZADO'" class="form-group">
+                            <h4>Comentarios Paciente: {{turnoDetalle.comentariosPaciente}}</h4>
+                            <textarea *ngIf="usuario.paciente" class="form-control"
+                                [(ngModel)]="nuevoComentarioPaciente"></textarea><button class="btn btn-success"
+                                (click)="enviarComentario()">Enviar</button>
+                        </div>
+                    </div>
+
 
                     <div *ngIf="turnoDetalle.estado == pendiente">
                         <!-- <div *ngIf="turnoDetalle.estado != ACEPTADO || turnoDetalle.estado != RECHAZADO
@@ -26,16 +43,50 @@
                                 (click)="habilitarEspecialista()">Habilitar</button>
                         </ng-template> -->
                     </div>
-                    <div *ngIf="turnoDetalle.estado != aceptado || turnoDetalle.estado != rechazado
-                                    || turnoDetalle.estado != realizado">
-                        <button class="btn btn-warning" (click)="cancelar()">CANCELAR</button>
-                        <button class="btn btn-danger" (click)="rechazar()">RECHAZAR</button>
+                    
+                    <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'RECHAZADO'
+                    && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO'" class="form-group col-md-2">
+                        <button class="btn btn-warning mb-2" (click)="cancelar()">CANCELAR</button>
                     </div>
-                    <div *ngIf="turnoDetalle.estado != rechazado">
-                        <button class="btn btn-success" (click)="aceptar()">ACEPTAR</button>
+                    <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'CANCELADO'
+                    && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'RECHAZADO'" class="form-group col-md-2">
+                        <button class="btn btn-danger mb-2" (click)="rechazar()"
+                            *ngIf="usuario.especialista">RECHAZAR</button>
                     </div>
-                    <div *ngIf="turnoDetalle.estado == aceptado">
-                        <button class="btn btn-primary" (click)="finalizar()">FINALIZAR</button>
+                    <div *ngIf="turnoDetalle.estado != 'RECHAZADO' && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO' && turnoDetalle.estado != 'ACEPTADO'">
+                        <button class="btn btn-success mb-2" (click)="aceptar()"
+                            *ngIf="usuario.especialista">ACEPTAR</button>
+                    </div>
+                    <div *ngIf="turnoDetalle.estado == 'ACEPTADO' && turnoDetalle.estado != 'FINALIZADO'">
+                        <button class="btn btn-primary mb-2" (click)="finalizar()"
+                            *ngIf="usuario.especialista">FINALIZAR</button>
+                    </div>
+                </div>
+                <div *ngIf="usuario.especialista">
+                    <h4 *ngIf="turnoDetalle.comentariosEspecialista != ''">Comentarios Especialista:
+                        {{turnoDetalle.comentariosEspecialista}}</h4>
+                    <div *ngIf="cancela || rechaza || finaliza" class="form-group">
+                        <textarea *ngIf="usuario.especialista" class="form-control"
+                            [(ngModel)]="nuevoComentarioEspecialista" placeholder="Deje un comentario..."></textarea>
+                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                    </div>
+                </div>
+                <div *ngIf="usuario.paciente">
+                    <h4 *ngIf="turnoDetalle.comentariosPaciente != ''">Comentarios Paciente:
+                        {{turnoDetalle.comentariosPaciente}}</h4>
+                    <div *ngIf="cancela" class="form-group">
+                        <textarea *ngIf="usuario.paciente" class="form-control" [(ngModel)]="nuevoComentarioPaciente"
+                            placeholder="Deje un comentario..."></textarea>
+                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                    </div>
+                </div>
+                <div *ngIf="usuario.administrador">
+                    <h4 *ngIf="turnoDetalle.comentariosAdmin != ''">Comentarios Administrador:
+                        {{turnoDetalle.comentariosAdmin}}</h4>
+                    <div *ngIf="cancela" class="form-group">
+                        <textarea *ngIf="usuario.administrador" class="form-control"
+                            [(ngModel)]="nuevoComentarioAdmin" placeholder="Deje un comentario..."></textarea>
+                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
                     </div>
                 </div>
                 <!-- <div class="form-group col-8">

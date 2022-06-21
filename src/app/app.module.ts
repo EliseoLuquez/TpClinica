@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { RecaptchaModule } from "ng-recaptcha";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './componentes/navbar/navbar.component';
@@ -30,6 +30,10 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { AltaUsuarioComponent } from './componentes/alta-usuario/alta-usuario.component';
 import { AltaEspecialidadComponent } from './componentes/alta-especialidad/alta-especialidad.component';
 import { ListaEspecialidadComponent } from './componentes/lista-especialidad/lista-especialidad.component';
+import { EncuestaComponent } from './componentes/encuesta/encuesta.component';
+import { MisTurnosEspecialistaComponent } from './componentes/mis-turnos-especialista/mis-turnos-especialista.component';
+import { FilterPacientePipe } from './pipes/filter-paciente.pipe';
+import { FilterEspecialistaPipe } from './pipes/filter-especialista.pipe';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,10 @@ import { ListaEspecialidadComponent } from './componentes/lista-especialidad/lis
     AltaEspecialidadComponent,
     ListaEspecialidadComponent,
     SolicitarTurnosComponent,
+    EncuestaComponent,
+    MisTurnosEspecialistaComponent,
+    FilterPacientePipe,
+    FilterEspecialistaPipe,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +73,8 @@ import { ListaEspecialidadComponent } from './componentes/lista-especialidad/lis
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    IngresoModule
+    IngresoModule,
+    RecaptchaModule
     
   ],
   providers: [],

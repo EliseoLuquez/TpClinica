@@ -17,4 +17,5 @@ export class Usuario {
     img2Nombre!: string;
     img2Url!: string;
     habilitado!: boolean;
+    horarios!: string;
 }

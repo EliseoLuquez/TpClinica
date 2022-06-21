@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
 import { Turno } from 'src/app/clases/turno';
 import { Usuario } from 'src/app/clases/usuario';
 import { AuthService } from 'src/app/services/auth.service';
@@ -12,13 +15,15 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class SolicitarTurnosComponent implements OnInit {
 
+  public usuario$: Observable<any> = this.authSvc.afAuth.user;
   especialidades: any = [];
   especialidadSeleccionada: any;
   especialistaSeleccionado: any;
   pacienteSeleccionado: any;
-  usuarios: any = [];
-  especialistas: any = [];
-  pacientes: any = [];
+  usuarios: Usuario[] = [];
+  especialistas: Usuario[] = [];
+  especialistasEspecialidad: Usuario[] = [];
+  pacientes: Usuario[] = [];
   turno!: Turno;
   turnosOcupados: any;
   fromDate: any;
@@ -28,18 +33,19 @@ export class SolicitarTurnosComponent implements OnInit {
   fechaElegida: any;
   horaElegida!: string;
   usuario: Usuario = new Usuario();
-  turnosDisponibles: any = [];
-  listaUsuarios: any[] = [];
+  turnosDisponibles: any[] = [];
+  listaUsuarios: Usuario[] = [];
   idAdmin = false;
+  email!: string;
+  paciente!: any;
+  administrador!: any;
 
 
-  constructor(private firebaseSvc: UsuarioService, private authSvc: AuthService, private turnoSvc: TurnoService) {
+  constructor(private usuarioSvc: UsuarioService, private authSvc: AuthService, private turnoSvc: TurnoService, private router: Router) {
     this.cargarTurnos();
     this.cargarEspecialidades();
     this.cargarUsuarios();
-    //let usuario = this.lsSvc.getUsuarioLS();
-    //console.log(usuario[0].administrador);
-    
+    this.obtenerUsuarioLogueado();
   }
 
   ngOnInit(): void {
@@ -48,8 +54,26 @@ export class SolicitarTurnosComponent implements OnInit {
 
   }
 
+  obtenerUsuarioLogueado(){
+   
+    this.usuario$.subscribe((result: any) => {
+      if(result!= null)
+      {
+        this.email = result['email'];
+        this.usuarioSvc.getUsuarios().subscribe(usuarios => {
+          usuarios.forEach(usuario => {
+            if(usuario.email == this.email){
+              console.log(usuario);
+              this.usuario = usuario;
+            }
+          })
+        });
+      }
+    });
+}
+
   cargarEspecialidades() {
-    this.firebaseSvc.getEspecialidades().subscribe((especialidades: any) => {
+    this.usuarioSvc.getEspecialidades().subscribe((especialidades: any) => {
       this.especialidades = especialidades;
       //console.log(especialidades);
     });
@@ -60,23 +84,20 @@ export class SolicitarTurnosComponent implements OnInit {
 
     this.turnoSvc.getTurnos().subscribe(turnos => {
       this.turnosOcupados = turnos;
-      console.log(this.turnosOcupados);
       this.cargarTurnosDisponibles();
     });
   }
 
   asignarEspecialidadSeleccionada(especialidad:any) {
-    console.log(especialidad);
     // var data = especialidad;
     this.especialidadSeleccionada = especialidad;
-    this.getEspecialistas();
+    this.getEspecialistasSegunEspecialidad();
     //this.especialidadesSeleccionadas.push(especialidad);
     //this.formulario.controls['especialidades'].setValue(this.especialidadesSeleccionadas);
 
   }
 
   asignarEspecialista(especialista:any) {
-    console.log(especialista);
     // var data = especialidad;
     this.especialistaSeleccionado = especialista;
     //this.getEspecialistas();
@@ -86,19 +107,27 @@ export class SolicitarTurnosComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this.firebaseSvc.getUsuarios().subscribe((usuarios: any) => {
+    this.usuarioSvc.getUsuarios().subscribe((usuarios: Usuario[]) => {
       this.usuarios = usuarios;
+      //console.log(this.usuarios);
+      
+      this.getPacientes(); 
+      this.getEspecialistas();
       this.authSvc.afAuth.onAuthStateChanged(user => {
         // if (user) {
         //   //console.log(user);
         //   this.usuario.email = user.email;
         // }
-        this.getPacientes(); 
+         
       });
+      
       //console.log(usuarios);
     });
-  }
 
+      
+
+  }
+  
   // getUsuario() {
   //   this.usuarios.forEach(item => {
   //     if (this.usuario.email == item.email) {
@@ -108,24 +137,29 @@ export class SolicitarTurnosComponent implements OnInit {
   //   })
   // }
 
-  getEspecialistas() {
-    this.usuarios.forEach((element: { especialista: any; especialidades: any[]; }) => {
-      if (element.especialista) {
-        console.log(element);
-
-        element.especialidades.forEach(item => {
-          if (item == this.especialidadSeleccionada) {
-            this.especialistas.push(element);
-            //console.log(element);
+  getEspecialistasSegunEspecialidad(){
+    this.especialistas.forEach((element: Usuario) => {
+        element.especialidades.forEach((item:any) => {
+          if (item == this.especialidadSeleccionada.nombre) {
+            this.especialistasEspecialidad.push(element);
 
           }
         });
-      }
+      
     });
   }
 
+  getEspecialistas() {
+    this.usuarios.forEach((element: Usuario) => {
+      if (element.especialista) {
+          this.especialistas.push(element);
+      }
+    });
+
+  }
+
   getPacientes() {
-    this.usuarios.forEach((element: { paciente: any; }) => {
+    this.usuarios.forEach((element: any) => {
       if (element.paciente) {
        // console.log(element);
         this.pacientes.push(element);
@@ -144,11 +178,12 @@ export class SolicitarTurnosComponent implements OnInit {
       this.turno.idEspecialista = this.especialistaSeleccionado.id;
       if (this.usuario.administrador) {
         this.turno.idPaciente = this.pacienteSeleccionado.id;
-        this.turno.paciente = this.pacienteSeleccionado.toString();
+        this.turno.paciente = this.pacienteSeleccionado;
       }
       else {
         this.turno.idPaciente = this.usuario.id;
-        this.turno.paciente = this.usuario.toString();
+        this.paciente = this.usuario;
+        this.turno.paciente = this.paciente;
       }
       this.turno.idPaciente = this.usuario.id;
       this.turno.especialista = this.especialistaSeleccionado;
@@ -162,6 +197,12 @@ export class SolicitarTurnosComponent implements OnInit {
       //console.log(this.turno);
 
       this.turnoSvc.addTurno(this.turno);
+
+      this.especialidadSeleccionada = null;
+      this.especialistaSeleccionado = null;
+      this.fechaElegida = null;
+      this.horaElegida = "";
+      this.router.navigate(['solicitarTurno']);
     }
 
   }
@@ -227,7 +268,7 @@ export class SolicitarTurnosComponent implements OnInit {
       else {
         hours = hoursWeek;
         row_date = { day: getDate, month: getMonth, year: current_date.getFullYear(), hours };
-        console.log(row_date);
+        //console.log(row_date);
       }
 
       var fmt_date = { weekDay: weekday[current_date.getDay()], date: getDate, month: months[current_date.getMonth()] };
@@ -319,7 +360,7 @@ export class SolicitarTurnosComponent implements OnInit {
 
   enviarUsuarioSeleccionado(usuario: any) {
     this.pacienteSeleccionado = usuario;
-    //console.log(this.pacienteSeleccionado);
+    console.log(this.pacienteSeleccionado);
 
   }
 

@@ -10,6 +10,7 @@ export class Turno {
     hora!: string;
     comentariosPaciente!: string;
     comentariosEspecialista!: string;
+    comentariosAdmin!: string;
 
 
 

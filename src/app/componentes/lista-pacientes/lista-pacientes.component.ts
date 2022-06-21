@@ -19,8 +19,9 @@ export class ListaPacientesComponent implements OnInit {
   }
 
   enviarPaciente(usuario: any){
-    //console.log(usuario);
+    console.log(usuario);
     
+    this.pacienteSeleccionado.emit(usuario);
   }
 
 }

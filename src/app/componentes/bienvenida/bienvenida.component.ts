@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -10,10 +11,18 @@ import { AuthService } from 'src/app/services/auth.service';
 export class BienvenidaComponent implements OnInit {
 
   islogged = false;
-
+  public usuario$: Observable<any> = this.authSvc.afAuth.user;
+  
   constructor(private router: Router, private authSvc: AuthService) { }
 
   ngOnInit(): void {
+    this.usuario$.subscribe((result: any) => {
+      if(result != null)
+      {
+        this.islogged = true;
+      }
+    });
+
     console.log(this.authSvc.isLoggedIn);
     
     if(this.authSvc.isLoggedIn){

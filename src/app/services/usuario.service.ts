@@ -16,30 +16,30 @@ export class UsuarioService {
 
   usuariosCollection!: AngularFirestoreCollection;
   usuarios!: Observable<Usuario[]>;
+  usuariosLog: any[] = [];
 
   especialidadesCollection!: AngularFirestoreCollection;
   especialidades!: Observable<any[]>;
 
   usuarioId!: any;
   usuarioLogueado!: any;
+  usLog: any;
 
   constructor(public db: AngularFirestore, public storage: AngularFireStorage) {
     this.cargarUsuarios();
     this.cargarEspecialidades();
-    
-
-    
-    
   }
 
-  getUsuario = (uid: any): Observable<any> => {
-    return this.db.collection(this.dbPathUsuarios).doc(uid).get();
-  }
+  // getUsuario(uid: any): Observable<any> {
+  //   return this.db.collection(this.dbPathUsuarios).doc(uid).get();
+  // }
 
 
-  addUsuario(usuario: Usuario, img: Imagen) {
+
+  addUsuario(usuario: Usuario) {
     console.log(this.usuariosCollection);
     this.usuariosCollection.add({
+      id: usuario.id,
       nombre: usuario.nombre,
       apellido: usuario.apellido,
       edad: usuario.edad,
@@ -52,8 +52,11 @@ export class UsuarioService {
       administrador: usuario.administrador,
       especilista: usuario.especialista,
       paciente: usuario.paciente,
-      img1Nombre: img.nombre,
-      img1Url: img.url,
+      img1Nombre: "",
+      img1Url: "",
+      img2Nombre: "",
+      img2Url: "",
+      horarios: ""
     });
   }
 
@@ -69,28 +72,143 @@ export class UsuarioService {
       }));
   }
 
+  
+
+  cargarUsuariosLog() {
+
+    this.usLog = this.getUsuarios();
+    console.log(this.usLog);
+    this.usuariosLog = [];
+
+    this.usLog.subscribe((usuarios: any) => {
+      console.log(usuarios);
+      usuarios.forEach((element: any) => {
+        if(element.email == "leliseo89@hotmail.com"){
+          this.usuariosLog.push(element);
+        }
+        if(element.email == "alegrepatricia72@gmail.com"){
+          this.usuariosLog.push(element);
+        }
+        if(element.email == "rominapuertas91@gmail.com"){
+          this.usuariosLog.push(element);
+        }
+      });
+      
+    });
+  }
+
   onUpload(filePath: string, file: any) {
     const ref = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
   }
 
-  uploadUsuarioImg(img: Imagen, usuario: Usuario): Observable<any> {
-    const filePath = `${this.dbPathUsuarios}/${img.file.name}`;
-    const storageRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, img.file);
+  // uploadUsuarioImg(img: Imagen, usuario: Usuario): Observable<any> {
+  //   const filePath = `${this.dbPathUsuarios}/${img.file.name}`;
+  //   const storageRef = this.storage.ref(filePath);
+  //   const uploadTask = this.storage.upload(filePath, img.file);
 
+  //   uploadTask.snapshotChanges().pipe(
+  //     finalize(() => {
+  //       storageRef.getDownloadURL().subscribe(downloadURL => {
+  //         img.url = downloadURL;
+  //         img.nombre = img.file.name;
+  //         this.addUsuario(usuario, img);
+  //       });
+  //     })
+  //   ).subscribe();
+
+  //   return uploadTask.percentageChanges();
+  // }
+  uploadUsuarioImg(img1: Imagen, img2: Imagen, usuario: Usuario) {
+    const filePath = `${this.dbPathUsuarios}/${usuario.email}/${img1.file.name}`;
+    const storageRef = this.storage.ref(filePath);
+    const uploadTask = this.storage.upload(filePath, img1.file);
+    
+    //var porcentaje = this.uploadImagen(img1).subscribe({complete(){}});
     uploadTask.snapshotChanges().pipe(
       finalize(() => {
         storageRef.getDownloadURL().subscribe(downloadURL => {
-          img.url = downloadURL;
-          img.nombre = img.file.name;
-          this.addUsuario(usuario, img);
+          img1.url = downloadURL;
+          this.updateUsuarioImg(usuario.id, {img1Nombre: img1.file.name, img1Url: img1.url});
+          //img1.nombre = img1.file.name;
+          //this.addUsuario(usuario, img1);
         });
       })
     ).subscribe();
 
-    return uploadTask.percentageChanges();
+    if(usuario.paciente){
+      const filePath2 = `${this.dbPathUsuarios}/${usuario.email}/${img2.file.name}`;
+      const storageRef2 = this.storage.ref(filePath);
+      const uploadTask2 = this.storage.upload(filePath2, img2.file);
+      uploadTask2.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef2.getDownloadURL().subscribe(downloadURL => {
+            img2.url = downloadURL;
+            this.updateUsuarioImg(usuario.id, {img2Nombre: img2.file.name, img2Url: img2.url});
+            //img1.nombre = img1.file.name;
+            //this.addUsuario(usuario, img1);
+          });
+        })
+      ).subscribe();
+    }
+
+
+    // this.uploadImagen(img1, usuario).subscribe(
+    //   percentage => {
+    //     var percentage1 = Math.round(percentage);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
+
+    // this.uploadImagen(img2, usuario).subscribe(
+    //   percentage => {
+    //     var percentage2 = Math.round(percentage);
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
+
   }
+
+  updateUsuarioImg(id: any, data: any) {
+    const tutorialsRef = this.db.collection(this.dbPathUsuarios);
+    tutorialsRef.doc(id).update(data);
+  }
+
+  uploadImagen(img: Imagen, usuario: Usuario) {
+    const filePath = `${this.dbPathUsuarios}/${usuario.email}/${img.file.name}`;
+    const storageRef = this.storage.ref(filePath);
+    const uploadTask = this.storage.upload(filePath, img.file);
+
+   
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        storageRef.getDownloadURL().subscribe(downloadURL => {
+          img.url = downloadURL;
+          //img.file.name = img.file.name;
+          var data = { img1Nombre: img.file.name, img1Url: img.url };
+          var data2 = { img2Nombre: img.file.name, img2Url: img.url };
+          var data1grabado = false;
+          if (!usuario.paciente) {
+            this.updateUsuarioImg(usuario.id, data);
+            console.log("grabo data 1");
+            
+            //this.updateUsuarioImg(usuario.id, data2);
+            if (!usuario.img2Url) {
+              this.updateUsuarioImg(usuario.id, data2);
+              console.log("grabo data 2");
+            }
+          }
+        });
+      })
+    ).subscribe();
+    return uploadTask.percentageChanges()
+  }
+
+  
 
   deleteFile(img: Imagen): void {
     this.deleteFileStorage(img.nombre);
@@ -111,9 +229,26 @@ export class UsuarioService {
     tutorialsRef.doc(usuario.id).update({ habilitado: usuario.habilitado });
   }
 
+  updateUsuarioHorarios(usuario: Usuario) {
+    console.log(usuario.horarios);
+    
+    const tutorialsRef = this.db.collection(this.dbPathUsuarios);
+    tutorialsRef.doc(usuario.id).update({horarios: Object.assign({}, usuario.horarios)});
+  }
+
   getUsuarios() {
     return this.usuarios;
   }
+
+  // getUsuariosLog(){
+  //   this.getUsuario("zqHBSsl2hOYW7dwStPXF").subscribe(u => {
+  //     var usuario = u;
+  //     console.log(usuario);
+  //    this.usuariosLog.push(usuario);
+  //   });
+    
+  //   return this.usuariosLog;
+  // }
 
   cargarEspecialidades() {
     this.especialidadesCollection = this.db.collection(this.dbPathEspecialidades);

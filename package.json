@@ -27,6 +27,7 @@
     "@firebase/auth": "^0.19.12",
     "express": "^4.17.3",
     "firebase": "^9.6.11",
+    "ng-recaptcha": "^9.0.0",
     "path": "^0.12.7",
     "request": "^2.79.0",
     "rxjs": "~7.5.0",

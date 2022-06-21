@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   public usuario: any;
-  public usu!: Observable<any>; 
+  public usu!: Observable<any>;
   public usuario$: Observable<any> = this.afAuth.user;
   public isLoggedIn = false;
   public isLoggedInAdmin = false;
@@ -19,7 +19,7 @@ export class AuthService {
   msjError: string = "";
   usuarioId!: any;
   usuarioLogueado!: any;
-  
+
   constructor(public afAuth: AngularFireAuth, private router: Router, private usuarioSvc: UsuarioService) {
     console.log(this.usuarioLogueado);
     this.usuarioSvc.getUsuarios().subscribe(usuarios => {
@@ -32,7 +32,7 @@ export class AuthService {
               console.log(item.administrador);
               console.log(this.usuario);
               this.usuario = item;
-            
+
               if (item.administrador) {
                 this.isLoggedInAdmin = true;
               }
@@ -51,7 +51,7 @@ export class AuthService {
         });
       });
     });
-
+    this.obtenerUsuarioLogueado();
     console.log(this.usuarios);
 
   }
@@ -61,19 +61,22 @@ export class AuthService {
     console.log(usuario.email);
     return await this.afAuth.signInWithEmailAndPassword(usuario.email, usuario.password).then((result) => {
       this.msjError = "";
-      if(result.user)
-      {
+      if (result.user) {
         this.usuario = new Usuario();
         this.usuario.id = result.user?.uid;
         this.usuario.email = result.user?.email;
-        console.log(this.usuario);
-        if(!result.user?.emailVerified){
+        console.log(result.user);
+        if (!result.user?.emailVerified) {
+          console.log("email no verificado");
           this.router.navigate(['ingreso/envio-email']);
+        }
+        else {
+          this.router.navigate(['bienvenida']);
         }
       }
 
     })
-    .catch((res) => {
+      .catch((res) => {
         console.log(res.code);
         if (res.code == "auth/email-already-in-use") {
           this.msjError = "El email ingresado ya esta en uso."
@@ -82,34 +85,45 @@ export class AuthService {
           this.msjError = "El formato del email no es correcto."
         }
       });
-   
+
   }
 
   //register
-  async registro(usuario: Usuario) {
+  async registro(usuario: Usuario): Promise<any> {
 
-    return await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password).then((result) => {
-      this.msjError = "";
+    try {
+      var result = await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password);
       result.user?.sendEmailVerification();
-    })
-      .catch((res) => {
-        console.log(res.message);
-        if (res.code == "auth/email-already-in-use") {
-          this.msjError = "El email ingresado ya esta en uso."
-        }
-        if (res.code == "auth/invalid-email") {
-          this.msjError = "El formato del email no es correcto."
-        }
-      });
+      return result;
+    }
+    catch (error) {
+      console.log(error);
+
+    }
+    // return await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password).then((result) => {
+    //   this.msjError = "";
+    //   result.user?.sendEmailVerification();
+    //   console.log(result);
+
+    // })
+    //   .catch((res) => {
+    //     console.log(res.message);
+    //     if (res.code == "auth/email-already-in-use") {
+    //       this.msjError = "El email ingresado ya esta en uso."
+    //     }
+    //     if (res.code == "auth/invalid-email") {
+    //       this.msjError = "El formato del email no es correcto."
+    //     }
+    //   });
   }
-  
+
 
   public async signOut() {
     // this.isLoggedInAdmin = false;
     // this.isLoggedIn = false;
     try {
       await this.afAuth.signOut();
-      this.router.navigate(['/']);
+      //this.router.navigate(['/']);
     }
     catch (error) {
       console.log(error);
@@ -125,7 +139,7 @@ export class AuthService {
 
   verificarAprobacionAdmin(usuario: Usuario) {
     this.usuarios.forEach(item => {
-      if (item.email === usuario.email){
+      if (item.email === usuario.email) {
         if (item.habilitado) {
           return true;
         }
@@ -144,12 +158,42 @@ export class AuthService {
 
   }
 
+
+  obtenerUsuarioLogueado(){
+    var usuarios;
+    var usuario;
+    var email = "";
+    this.usuario$.subscribe(result => {
+      if(result!= null)
+      {
+         email = result['email'];
+      }
+    });
+    
+    this.usuarioSvc.getUsuarios().subscribe( res => {
+      usuarios = res;
+      if(usuarios != null){
+        usuarios.forEach((element) => {
+          if(element.email = email)
+          {
+            usuario = element;
+          }
+
+        });
+       
+      }
+    });
+    console.log(usuario);
+    
+    return usuario;
+  
+  }
   // public usuario: any;
   // msjError: string = "";
 
   // constructor(public afAuth: AngularFireAuth, private router: Router, public usuarioSvc: UsuarioService) { }
 
-  
+
 
 
 

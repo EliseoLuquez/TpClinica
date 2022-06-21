@@ -15,6 +15,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class AltaUsuarioComponent implements OnInit {
 
   public usuarioLog$: Observable<any> = this.authSvc.afAuth.user;
+  public usuarioLogueado: any;
   public formulario!: FormGroup;
   usuario!: Usuario;
   img1Perfil!: Imagen;
@@ -25,13 +26,15 @@ export class AltaUsuarioComponent implements OnInit {
   paciente = false;
   administrador = false;
   msjError!: string;
-  tipoUsuario!: string;
+  tipoUsuario: boolean = false;;
   especialidades: any = [];
   especialidadSeleccionada: any = [];
   especialidadesSeleccionadas: any = [];
+  captcha!: string;
   //usuarios = [];
 
   constructor(public fv: FormBuilder, private authSvc: AuthService, private usuarioSvc: UsuarioService, private router: Router) {
+    this.captcha = "";
     this.formulario = fv.group({
       nombre: ["", Validators.required],
       apellido: ["", Validators.required],
@@ -39,7 +42,7 @@ export class AltaUsuarioComponent implements OnInit {
       dni: ["", Validators.required],
       email: ["", [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       password: ["", Validators.required],
-      tipoUsuario: ["", Validators.required],
+      //tipoUsuario: ["", Validators.required],
       obraSocial: ["",],
       especialidades: ["",],
       img1Perfil: ["", Validators.required],
@@ -47,33 +50,43 @@ export class AltaUsuarioComponent implements OnInit {
     });
 
     console.log(this.usuarioLog$);
+    this.usuarioLog$.subscribe((result: any) => {
+      if(result!= null)
+      {
+        this.usuarioLogueado = result;
+      }
+    });
 
     //this.usuarioSvc.cargarEspecialidades();
   }
 
   ngOnInit(): void {
     this.cargarEspecialidades();
+    console.log(this.usuarioLog$);
   }
 
-  getTipoUsuario() {
-    console.log(this.tipoUsuario);
-    switch (this.tipoUsuario) {
-      case "Administrador":
-        this.administrador = true;
-        this.especialista = false;
-        this.paciente = false;
-        break;
-      case "Especialista":
-        this.administrador = false;
-        this.especialista = true;
-        this.paciente = false;
-        break;
-      case "Paciente":
-        this.administrador = false;
-        this.especialista = false;
-        this.paciente = true;
-        break;
-    }
+  resolved(captchaResponse: string){
+    this.captcha = captchaResponse;
+  }
+
+  getTipoUsuarioAdmin() {
+    this.administrador = true;
+    this.especialista = false;
+    this.paciente = false;
+    this.tipoUsuario = true;
+  }
+
+  getTipoUsuarioPaciente(){
+    this.administrador = false;
+    this.especialista = false;
+    this.paciente = true;
+    this.tipoUsuario = true;
+  }
+  getTipoUsuarioEspecialista(){
+    this.administrador = false;
+    this.especialista = true;
+    this.paciente = false;
+    this.tipoUsuario = true;
   }
 
   selectFile(event: any): void {
@@ -93,7 +106,7 @@ export class AltaUsuarioComponent implements OnInit {
     this.usuario.DNI = this.formulario.controls['dni'].value;
     this.usuario.email = this.formulario.controls['email'].value;
     this.usuario.password = this.formulario.controls['password'].value;
-    this.usuario.tipoUsuario = this.formulario.controls['tipoUsuario'].value;
+    //this.usuario.tipoUsuario = this.formulario.controls['tipoUsuario'].value;
     this.usuario.obraSocial = this.formulario.controls['obraSocial'].value;
     if (this.usuario.especialista || this.usuario.administrador) {
       this.usuario.obraSocial = "";
@@ -103,6 +116,16 @@ export class AltaUsuarioComponent implements OnInit {
     this.usuario.administrador = this.administrador;
     this.usuario.especialista = this.especialista;
     this.usuario.paciente = this.paciente;
+
+    if(this.usuario.administrador){
+      this.usuario.tipoUsuario = "Administrador";
+    }
+    if(this.usuario.especialista){
+      this.usuario.tipoUsuario = "Especialista";
+    }
+    if(this.usuario.paciente){
+      this.usuario.tipoUsuario = "Paciente";
+    }
 
     if (this.usuario.paciente || this.usuario.administrador) {
       this.usuario.especialidades = [];
@@ -120,6 +143,10 @@ export class AltaUsuarioComponent implements OnInit {
       //this.usuario.logueado = true;
       //this.usuario.fecha = new Date().toLocaleString();
       //await this.authSvc.enviarVerficacionEmail();
+      console.log(result.user.uid);
+      
+      this.usuario.id = result.user.uid;
+      this.usuarioSvc.addUsuario(this.usuario);
       this.msjError = "";
     })
       .catch((res) => {
@@ -145,14 +172,15 @@ export class AltaUsuarioComponent implements OnInit {
     console.log(this.usuario);
 
     //TODO: cambiar nombres de fotos porq no guarda la img si se llama igual
-    this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.usuario).subscribe(
-      ( percentage: number) => {
-        this.percentage = Math.round(percentage);
-      },
-      ( error: any) => {
-        console.log(error);
-      }
-    );
+    // this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.usuario).subscribe(
+    //   ( percentage: number) => {
+    //     this.percentage = Math.round(percentage);
+    //   },
+    //   ( error: any) => {
+    //     console.log(error);
+    //   }
+    // );
+    this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.img2Perfil, this.usuario);
 
     this.router.navigate(['ingreso/envio-email']);
   }

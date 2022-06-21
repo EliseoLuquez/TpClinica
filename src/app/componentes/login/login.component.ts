@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { map } from 'rxjs';
 import { Imagen } from 'src/app/clases/imagen';
 import { Usuario } from 'src/app/clases/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +18,19 @@ export class LoginComponent implements OnInit {
   password: string = "";
   usuario: Usuario = new Usuario();
   msjError!: string;
+  //usuarios!: any;
+  usuarios:Array <Usuario> = new Array<Usuario>();
+  arrayUsuarios:Array <Usuario> = new Array<Usuario>();
 
-  constructor(public router: Router, public authSvc: AuthService) { }
+  constructor(public router: Router, public authSvc: AuthService, public usuarioSvc: UsuarioService) {
+ 
+   }
 
   ngOnInit(): void {
+    // this.usuarios = [];
+    // this.usuarios = this.usuarioSvc.getUsuariosLog();
+    // console.log(this.usuarios);
+    this.cargarUsuarios();
   }
 
   async onLogin() {
@@ -39,6 +50,11 @@ export class LoginComponent implements OnInit {
       this.email = 'leliseo89@hotmail.com';
       this.password = '123456';
   }
+
+  async logUsuario(usuario:any) {
+    this.email = usuario.email;
+    this.password = usuario.password;
+}
 
   // public usuario: Usuario = new Usuario();
   // public mostrarError = false;
@@ -68,9 +84,6 @@ export class LoginComponent implements OnInit {
         if (this.authSvc.msjError != "") {
           this.msjError = this.authSvc.msjError;
         }
-        else {
-          this.router.navigate(['bienvenida']);
-        }
     })
     .catch((res)=>{
       if(res.message == "The password is invalid or the user does not have a password."){
@@ -79,14 +92,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  
-  // async logEliseo() {
-  //   //console.log(this.usuario);
-  //   this.email = 'leliseo89@hotmail.com';
-  //   this.password = '123456';
-  //   //console.log(this.authSvc.msjError);
-  // }
-
+  cargarUsuarios()
+  {
+    this.arrayUsuarios = [];
+    console.log(this.arrayUsuarios+"empieza");
+    this.usuarioSvc.db.collection("usuariosClinica", ref => ref.orderBy('tipoUsuario')).snapshotChanges().pipe( map( (data: any) => {              
+      data.map((us: any) =>
+      { 
+        const user = new Usuario();
+        user.email = us.payload.doc.data().email;
+        // console.log(user.Email);
+        user.password = us.payload.doc.data().password;
+        user.img1Url = us.payload.doc.data().img1Url;
+        user.nombre = us.payload.doc.data().nombre;
+        user.tipoUsuario = us.payload.doc.data().tipoUsuario;
+        this.usuarios.push(user);
+      });
+    })).subscribe((datos: any) => {
+    });
+    console.log(this.arrayUsuarios+"termina");
+    return this.usuarios;
+   
+  }
 
 
 }

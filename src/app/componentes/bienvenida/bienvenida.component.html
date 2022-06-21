@@ -1,13 +1,40 @@
 <div class="container">
     <div class="row text-center">
         <img id="img" class="mb-4 pt-4" src="../../../assets/cruzVerde.jpg" alt="">
-        <div *ngIf="!islogged">
+        <div *ngIf="!islogged ;else bienvenida">
             <div class="col-12">
-                <button type="button" class="btn btn-lg btn-success m-4" (click)="goIngreso()">Entrar</button>   
+                <button type="button" class="btn btn-lg btn-success m-4" (click)="goIngreso()">Entrar</button>
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-lg btn-success m-4" (click)="goRegistro()">Registrarse</button>
             </div>
         </div>
+        <ng-template class="form-control" #bienvenida>
+            <p class="text-align-center">LA Clinica de Buenos Aires es una asociación civil sin fines de lucro que tiene
+                como objetivo brindar a la comunidad atención en salud de alta complejidad, formar profesionales médicos
+                de excelencia y desarrollar conocimiento científico de vanguardia para el país y el mundo.
+
+                Fundado en 1844 por la comunidad británica en Argentina, y abierto a toda la población, celebró durante
+                el 2019 su 175° Aniversario con un firme compromiso por sus valores y mirada hacia el futuro.
+
+                El Hospital se destaca por sus logros de vanguardia, por la fundación de la Escuela de Enfermería más
+                antigua del país, y por la alianza con la Universidad de Buenos Aires y con la Universidad Católica
+                Argentina que lo habilitan como Unidad Docente y Hospital Universitario, respectivamente.
+
+                Atiende cerca de 1 millón de pacientes al año; capacita de manera totalmente gratuita a generaciones de
+                enfermeros; y forma decenas de profesionales médicos cada año. Cuenta con más de 2.500 profesionales de
+                la salud y una Red de Atención propia con presencia en la Ciudad de Buenos Aires y el conurbano
+                bonaerense.
+
+                Hoy, sienta las bases de sus próximos logros a través del cumplimiento de estrictos estándares
+                internacionales, en calidad y seguridad al paciente; abordando el desafío de acreditar próximamente por
+                la Joint Commission International, prestigiosa institución que audita el cumplimiento de estrictas
+                normas y procedimientos.
+
+                De esta manera, mira el futuro y proyecta con firmeza sus próximos 175 años. </p>
+                <p>
+                    <img id="imgInstitucional" src="../../../assets/institucional-min.jpg">
+                </p>
+        </ng-template>
     </div>
 </div>

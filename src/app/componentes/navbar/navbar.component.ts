@@ -23,38 +23,41 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private authSvc: AuthService, public usuarioSvc: UsuarioService) { }
 
    ngOnInit(): void {
-    this.obtenerUsuarioLogueado();
+      this.obtenerUsuarioLogueado();
   }
 
   obtenerUsuarioLogueado(){
-    this.usuario$.subscribe((result: any) => {
-      this.email = result['email'];
-      this.usuarioSvc.getUsuarios().subscribe(usuarios => {
-        usuarios.forEach(usuario => {
-          //console.log(usuario);
-          if(usuario.email == this.email){
-            this.usuario = usuario;
-            console.log(this.usuario);
-            if(this.usuario.paciente){
-              this.usuario.administrador = false;
-              this.especialistaLogueado = false;
-              this.pacienteLogueado = this.usuario.paciente;
-            }
-            if(this.usuario.especialista){
-              this.usuario.administrador = false;
-              this.especialistaLogueado = this.usuario.especialista;
-              this.pacienteLogueado = false;
-            }
-            if(this.usuario.administrador){
-              this.adminLogueado = this.usuario.administrador;
-              this.especialistaLogueado = false;
-              this.pacienteLogueado = false;
-            }
-          }
-        })
-      })
-    });
-
+   
+      this.usuario$.subscribe((result: any) => {
+        if(result!= null)
+        {
+          this.email = result['email'];
+          this.usuarioSvc.getUsuarios().subscribe(usuarios => {
+            usuarios.forEach(usuario => {
+              //console.log(usuario);
+              if(usuario.email == this.email){
+                this.usuario = usuario;
+                console.log(this.usuario);
+                if(this.usuario.paciente){
+                  this.usuario.administrador = false;
+                  this.especialistaLogueado = false;
+                  this.pacienteLogueado = this.usuario.paciente;
+                }
+                if(this.usuario.especialista){
+                  this.usuario.administrador = false;
+                  this.especialistaLogueado = this.usuario.especialista;
+                  this.pacienteLogueado = false;
+                }
+                if(this.usuario.administrador){
+                  this.adminLogueado = this.usuario.administrador;
+                  this.especialistaLogueado = false;
+                  this.pacienteLogueado = false;
+                }
+              }
+            })
+          });
+        }
+      });
   }
 
   goRegistro(){
@@ -86,8 +89,12 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['miPerfil']);
   }
 
-  goMisTurnos(){
+  goMisTurnosPaciente(){
     this.router.navigate(['misTurnos']);
+  }
+
+  goMisTurnosEspecialista(){
+    this.router.navigate(['misTurnosEspecialista']);
   }
 
   goTurnos(){

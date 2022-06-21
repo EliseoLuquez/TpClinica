@@ -7,15 +7,18 @@
 
     <div *ngIf="usuario$ | async as usuario; else login">
         <a class="btn text-light" (click)="goBienvenida()">Bienvenida</a>
-        <a class="btn text-light" (click)="goSeccionUsuarios()">Sección Usuarios</a>
-        <a class="py-2 d-none d-md-inline-block btn" *ngIf="usuario">{{usuario?.email}}</a>
+        <a class="btn text-light" (click)="goSeccionUsuarios()" *ngIf="adminLogueado">Sección Usuarios</a>
         <a class="btn text-light" (click)="goSolicitarTurno()" *ngIf="adminLogueado || pacienteLogueado">Solicitar Turno</a>
-        <a class="btn text-light" (click)="goMisTurnos()" *ngIf="especialistaLogueado || pacienteLogueado">Mis Turnos</a>
-        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="onLogout()" *ngIf="usuario">Logout</a>
+        <a class="btn text-light" (click)="goMisTurnosPaciente()" *ngIf="pacienteLogueado">Mis Turnos</a>
+        <a class="btn text-light" (click)="goMisTurnosEspecialista()" *ngIf="especialistaLogueado">Mis Turnos</a>
+        <a class="btn text-light" (click)="goTurnos()" *ngIf="adminLogueado">Turnos</a>
+        <a class="btn text-light" (click)="goMiPerfil()">Mi Perfil</a>
+        <a class="py-2 d-none text-light d-md-inline-block btn" *ngIf="usuario">{{usuario?.email}}</a>
+        <a class="py-2 d-none text-danger d-md-inline-block btn" type="button" (click)="onLogout()" *ngIf="usuario">Logout</a>
         
       </div>
       <ng-template #login>
-        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="goRegistro()">Registro</a>
-        <a class="py-2 d-none d-md-inline-block btn" type="button" (click)="goLogin()">Login</a>
+        <a class="py-2 d-none d-md-inline-block btn text-light" type="button" (click)="goRegistro()">Registro</a>
+        <a class="py-2 d-none d-md-inline-block btn text-light" type="button" (click)="goLogin()">Login</a>
       </ng-template>
 </nav>
