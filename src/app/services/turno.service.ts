@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { map, Observable } from 'rxjs';
+import { HistoriaClinica } from '../clases/historia-clinica';
 import { Turno } from '../clases/turno';
 
 @Injectable({
@@ -34,7 +35,8 @@ export class TurnoService {
   }
 
   addTurno(turno: Turno):any {
-    console.log(turno);
+    
+    
     this.turnosCollection.add({
       id:"",
       idEspecialista: turno.idEspecialista,
@@ -46,9 +48,11 @@ export class TurnoService {
       fecha: turno.fecha,
       hora: turno.hora,
       comentariosPaciente: turno.comentariosPaciente,
-      comentariosEspecialista: turno.comentariosEspecialista
+      comentariosEspecialista: turno.comentariosEspecialista,
+      historiaClinica: ""
     
     });
+    console.log(turno);
   }
 
   updateTurno(turno: Turno) {
@@ -75,4 +79,13 @@ export class TurnoService {
     const tutorialsRef = this.db.collection(this.dbPathTurnos);
     tutorialsRef.doc(turno.id).update({estado: turno.estado, comentariosAdmin: turno.comentariosAdmin});
   }
+
+  updateTurnoHistoriaClinica(historia: HistoriaClinica, turnoId:string) {
+    const tutorialsRef = this.db.collection(this.dbPathTurnos);
+    console.log(historia);
+    
+    tutorialsRef.doc(turnoId).update({historiaClinica: Object.assign({}, historia)});
+  }
 }
+
+

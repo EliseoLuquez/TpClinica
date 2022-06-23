@@ -1,7 +1,7 @@
 <!-- <app-usuario-detalle [usuarioPerfil]="usuario"></app-usuario-detalle> -->
 
 <div class="container" *ngIf="usuarioPerfil">
-    <div class="row">
+    <div class="row" *ngIf="visible" [@fadeInOut]>
         <div class="col-12">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <h2>Usuario</h2>
@@ -32,4 +32,6 @@
         </div>
     </div>
     <app-mis-horarios *ngIf="usuarioPerfil.especialista" [usuarioHorarios]="usuarioPerfil"></app-mis-horarios>
+    <br>
+    <app-historia-clinica *ngIf="usuarioPerfil.paciente"></app-historia-clinica>
 </div>

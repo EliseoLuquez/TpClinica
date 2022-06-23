@@ -7,10 +7,11 @@
 
     <div *ngIf="usuario$ | async as usuario; else login">
         <a class="btn text-light" (click)="goBienvenida()">Bienvenida</a>
-        <a class="btn text-light" (click)="goSeccionUsuarios()" *ngIf="adminLogueado">Sección Usuarios</a>
+        <a class="btn text-light" (click)="goSeccionUsuarios()" *ngIf="adminLogueado">Usuarios</a>
         <a class="btn text-light" (click)="goSolicitarTurno()" *ngIf="adminLogueado || pacienteLogueado">Solicitar Turno</a>
         <a class="btn text-light" (click)="goMisTurnosPaciente()" *ngIf="pacienteLogueado">Mis Turnos</a>
         <a class="btn text-light" (click)="goMisTurnosEspecialista()" *ngIf="especialistaLogueado">Mis Turnos</a>
+        <a class="btn text-light" (click)="goPacientes()" *ngIf="especialistaLogueado">Pacientes</a>
         <a class="btn text-light" (click)="goTurnos()" *ngIf="adminLogueado">Turnos</a>
         <a class="btn text-light" (click)="goMiPerfil()">Mi Perfil</a>
         <a class="py-2 d-none text-light d-md-inline-block btn" *ngIf="usuario">{{usuario?.email}}</a>

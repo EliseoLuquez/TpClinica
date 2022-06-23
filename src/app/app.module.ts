@@ -34,6 +34,13 @@ import { EncuestaComponent } from './componentes/encuesta/encuesta.component';
 import { MisTurnosEspecialistaComponent } from './componentes/mis-turnos-especialista/mis-turnos-especialista.component';
 import { FilterPacientePipe } from './pipes/filter-paciente.pipe';
 import { FilterEspecialistaPipe } from './pipes/filter-especialista.pipe';
+import { HistoriaClinicaComponent } from './componentes/historia-clinica/historia-clinica.component';
+import { AltaHistoriaClinicaComponent } from './componentes/alta-historia-clinica/alta-historia-clinica.component';
+import { PacientesComponent } from './componentes/pacientes/pacientes.component';
+import { FilterTurnosPipe } from './pipes/filter-turnos.pipe';
+import { ExcelTurnpsComponent } from './componentes/excel-turnps/excel-turnps.component';
+import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
+import { NotImageDirective } from './directivas/not-image.directive';
 
 @NgModule({
   declarations: [
@@ -63,6 +70,13 @@ import { FilterEspecialistaPipe } from './pipes/filter-especialista.pipe';
     MisTurnosEspecialistaComponent,
     FilterPacientePipe,
     FilterEspecialistaPipe,
+    HistoriaClinicaComponent,
+    AltaHistoriaClinicaComponent,
+    PacientesComponent,
+    FilterTurnosPipe,
+    ExcelTurnpsComponent,
+    EstadisticasComponent,
+    NotImageDirective,
   ],
   imports: [
     BrowserModule,

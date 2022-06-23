@@ -20,7 +20,7 @@ export class TurnosComponent implements OnInit {
   turnos: any;
 
   constructor(private turnoSvc: TurnoService,  private authSvc: AuthService) {
-    this.usuario = this.authSvc.usuario;
+    this.usuario = this.authSvc.usuarioLogueado;
     console.log(this.usuario);
     
     if(this.usuario != null){

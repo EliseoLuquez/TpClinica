@@ -36,10 +36,10 @@ export class UsuarioService {
 
 
 
-  addUsuario(usuario: Usuario) {
+  addUsuario(usuario: Usuario, img1: Imagen, img2: Imagen) {
     console.log(this.usuariosCollection);
     this.usuariosCollection.add({
-      id: usuario.id,
+      id: "",
       nombre: usuario.nombre,
       apellido: usuario.apellido,
       edad: usuario.edad,
@@ -57,6 +57,14 @@ export class UsuarioService {
       img2Nombre: "",
       img2Url: "",
       horarios: ""
+    }).then(result => {
+      console.log(result);
+      
+      if(result.id){
+        console.log(result);
+        this.uploadUsuarioImg(img1, img2, usuario, result.id);
+      }
+
     });
   }
 
@@ -72,7 +80,7 @@ export class UsuarioService {
       }));
   }
 
-  
+
 
   cargarUsuariosLog() {
 
@@ -83,17 +91,17 @@ export class UsuarioService {
     this.usLog.subscribe((usuarios: any) => {
       console.log(usuarios);
       usuarios.forEach((element: any) => {
-        if(element.email == "leliseo89@hotmail.com"){
+        if (element.email == "leliseo89@hotmail.com") {
           this.usuariosLog.push(element);
         }
-        if(element.email == "alegrepatricia72@gmail.com"){
+        if (element.email == "alegrepatricia72@gmail.com") {
           this.usuariosLog.push(element);
         }
-        if(element.email == "rominapuertas91@gmail.com"){
+        if (element.email == "rominapuertas91@gmail.com") {
           this.usuariosLog.push(element);
         }
       });
-      
+
     });
   }
 
@@ -119,24 +127,26 @@ export class UsuarioService {
 
   //   return uploadTask.percentageChanges();
   // }
-  uploadUsuarioImg(img1: Imagen, img2: Imagen, usuario: Usuario) {
+  uploadUsuarioImg(img1: Imagen, img2: Imagen, usuario: Usuario, id:string) {
     const filePath = `${this.dbPathUsuarios}/${usuario.email}/${img1.file.name}`;
     const storageRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, img1.file);
-    
+
     //var porcentaje = this.uploadImagen(img1).subscribe({complete(){}});
     uploadTask.snapshotChanges().pipe(
       finalize(() => {
         storageRef.getDownloadURL().subscribe(downloadURL => {
           img1.url = downloadURL;
-          this.updateUsuarioImg(usuario.id, {img1Nombre: img1.file.name, img1Url: img1.url});
+          const tutorialsRef = this.db.collection(this.dbPathUsuarios);
+            tutorialsRef.doc(id).update({ img1Nombre: img1.file.name, img1Url: img1.url });
+          //this.updateUsuarioImg(usuario.email, { img1Nombre: img1.file.name, img1Url: img1.url });
           //img1.nombre = img1.file.name;
           //this.addUsuario(usuario, img1);
         });
       })
     ).subscribe();
 
-    if(usuario.paciente){
+    if (usuario.paciente) {
       const filePath2 = `${this.dbPathUsuarios}/${usuario.email}/${img2.file.name}`;
       const storageRef2 = this.storage.ref(filePath);
       const uploadTask2 = this.storage.upload(filePath2, img2.file);
@@ -144,38 +154,27 @@ export class UsuarioService {
         finalize(() => {
           storageRef2.getDownloadURL().subscribe(downloadURL => {
             img2.url = downloadURL;
-            this.updateUsuarioImg(usuario.id, {img2Nombre: img2.file.name, img2Url: img2.url});
-            //img1.nombre = img1.file.name;
-            //this.addUsuario(usuario, img1);
+            //this.updateUsuarioImg(usuario.email, { img2Nombre: img2.file.name, img2Url: img2.url });
+            const tutorialsRef = this.db.collection(this.dbPathUsuarios);
+            tutorialsRef.doc(id).update({ img2Nombre: img2.file.name, img2Url: img2.url });
           });
         })
       ).subscribe();
     }
-
-
-    // this.uploadImagen(img1, usuario).subscribe(
-    //   percentage => {
-    //     var percentage1 = Math.round(percentage);
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
-
-    // this.uploadImagen(img2, usuario).subscribe(
-    //   percentage => {
-    //     var percentage2 = Math.round(percentage);
-    //   },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
-
   }
 
-  updateUsuarioImg(id: any, data: any) {
+  updateUsuarioImg(email: any, data: any) {
+
+ 
+    this.getUsuarioByEmail(email).snapshotChanges().pipe(map((data: any) => {
+      data.map((us: any) => {
+        this.usuarioId = us.payload.doc.id;
+      })
+    })
+    ).subscribe();
+
     const tutorialsRef = this.db.collection(this.dbPathUsuarios);
-    tutorialsRef.doc(id).update(data);
+    tutorialsRef.doc(this.usuarioId).update(data);
   }
 
   uploadImagen(img: Imagen, usuario: Usuario) {
@@ -183,7 +182,7 @@ export class UsuarioService {
     const storageRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, img.file);
 
-   
+
     uploadTask.snapshotChanges().pipe(
       finalize(() => {
         storageRef.getDownloadURL().subscribe(downloadURL => {
@@ -195,7 +194,7 @@ export class UsuarioService {
           if (!usuario.paciente) {
             this.updateUsuarioImg(usuario.id, data);
             console.log("grabo data 1");
-            
+
             //this.updateUsuarioImg(usuario.id, data2);
             if (!usuario.img2Url) {
               this.updateUsuarioImg(usuario.id, data2);
@@ -208,7 +207,10 @@ export class UsuarioService {
     return uploadTask.percentageChanges()
   }
 
-  
+
+  getUsuarioByEmail(email: string): any {
+    return this.db.collection("usuariosClinica", ref => ref.where('email', '==', email));
+  }
 
   deleteFile(img: Imagen): void {
     this.deleteFileStorage(img.nombre);
@@ -231,9 +233,9 @@ export class UsuarioService {
 
   updateUsuarioHorarios(usuario: Usuario) {
     console.log(usuario.horarios);
-    
+
     const tutorialsRef = this.db.collection(this.dbPathUsuarios);
-    tutorialsRef.doc(usuario.id).update({horarios: Object.assign({}, usuario.horarios)});
+    tutorialsRef.doc(usuario.id).update({ horarios: Object.assign({}, usuario.horarios) });
   }
 
   getUsuarios() {
@@ -246,7 +248,7 @@ export class UsuarioService {
   //     console.log(usuario);
   //    this.usuariosLog.push(usuario);
   //   });
-    
+
   //   return this.usuariosLog;
   // }
 
@@ -261,22 +263,22 @@ export class UsuarioService {
         });
       }));
     this.especialidades = this.especialidadesCollection.snapshotChanges()
-    .pipe(map(actions => {
-      return actions.map(a => {
-        const data = a.payload.doc.data();
-        return data;
-      });
-    }));
+      .pipe(map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          return data;
+        });
+      }));
     console.log(this.especialidadesCollection);
   }
 
-  addEspecilidad(especialidad: string){
+  addEspecilidad(especialidad: string) {
     this.especialidadesCollection.add({
       nombre: especialidad
     });
   }
 
-  getEspecialidades(){
+  getEspecialidades() {
     return this.especialidades;
   }
 

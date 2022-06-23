@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Usuario } from '../clases/usuario';
 import { UsuarioService } from './usuario.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,39 +19,56 @@ export class AuthService {
   msjError: string = "";
   usuarioId!: any;
   usuarioLogueado!: any;
+  listaUsuarios: any;
+  usuariosLista: any;
+  email:any;
+
 
   constructor(public afAuth: AngularFireAuth, private router: Router, private usuarioSvc: UsuarioService) {
-    console.log(this.usuarioLogueado);
-    this.usuarioSvc.getUsuarios().subscribe(usuarios => {
-      this.usuarios = usuarios;
-      afAuth.authState.subscribe(usuario => {
-        this.usuarios.forEach(item => {
-          if (usuario != null) {
-
-            if (usuario.email == item.email) {
-              console.log(item.administrador);
-              console.log(this.usuario);
-              this.usuario = item;
-
-              if (item.administrador) {
-                this.isLoggedInAdmin = true;
-              }
-              else {
-                this.isLoggedInAdmin = false;
-              }
-              this.isLoggedIn = true;
-              //this.usuario.email = usuario.email || "";
-              //this.ls.set("usuarioLs", JSON.stringify(this.usuario));
-              //this.email = usuario.email || "";
-            }
-            else {
-              this.isLoggedIn = false;
-            }
-          }
-        });
-      });
+    this.usuario$.subscribe(result => {
+      if(result!= null)
+      {
+         this.email = result['email'];
+      }
     });
-    this.obtenerUsuarioLogueado();
+    console.log(this.usuarioLogueado);
+    this.listaUsuarios = this.usuarioSvc.db.collection("usuariosClinica");
+
+    this.listaUsuarios.snapshotChanges().pipe(
+      map((data: any) => {
+        this.usuariosLista = new Array<Usuario>();
+        data.map((item: any) => {
+         
+          //var turno = item;
+          var usuario = new Usuario();
+          usuario.id = item.payload.doc.id;
+          usuario.nombre = item.payload.doc.data().nombre;
+          usuario.apellido = item.payload.doc.data().apellido;
+          usuario.edad = item.payload.doc.data().edad;
+          //turno.paciente = new Usuario();
+          usuario.DNI = item.payload.doc.data().DNI;
+          usuario.email = item.payload.doc.data().email;
+          usuario.password = item.payload.doc.data().password;
+          usuario.obraSocial = item.payload.doc.data().obraSocial;
+          usuario.especialidades = item.payload.doc.data().especialidades;
+          usuario.administrador = item.payload.doc.data().administrador;
+          usuario.paciente = item.payload.doc.data().paciente;
+          usuario.especialista = item.payload.doc.data().especialista;
+          usuario.tipoUsuario = item.payload.doc.data().tipoUsuario;
+          usuario.habilitado = item.payload.doc.data().habilitado;
+          usuario.horarios = item.payload.doc.data().horarios;
+          usuario.img1Nombre = item.payload.doc.data().img1Nombre;
+          usuario.img1Url = item.payload.doc.data().img1Url;
+          usuario.img2Nombre = item.payload.doc.data().img2Nombre;
+          usuario.img2Url = item.payload.doc.data().img2Url;
+          this.usuariosLista.push(usuario);
+          if(usuario.email == this.email){
+            this.usuarioLogueado = usuario;
+          }
+        })
+      })
+    ).subscribe();
+    //this.usuarioLogueado = this.obtenerUsuarioLogueado();
     console.log(this.usuarios);
 
   }
@@ -186,30 +203,5 @@ export class AuthService {
     console.log(usuario);
     
     return usuario;
-  
   }
-  // public usuario: any;
-  // msjError: string = "";
-
-  // constructor(public afAuth: AngularFireAuth, private router: Router, public usuarioSvc: UsuarioService) { }
-
-
-
-
-
-
-
-  // async getUserLogged() {
-  //   return this.afAuth.onAuthStateChanged(usuario => {
-  //     if(usuario)
-  //     {
-  //       console.log(usuario);
-
-  //     }
-  //   });
-  // }
-
-  // logout() {
-  //   this.afAuth.signOut();
-  // }
 }

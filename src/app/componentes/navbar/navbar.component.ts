@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
               //console.log(usuario);
               if(usuario.email == this.email){
                 this.usuario = usuario;
-                console.log(this.usuario);
+         
                 if(this.usuario.paciente){
                   this.usuario.administrador = false;
                   this.especialistaLogueado = false;
@@ -104,5 +104,10 @@ export class NavbarComponent implements OnInit {
   goSolicitarTurno(){
     this.router.navigate(['solicitarTurno']);
   }
+
+  goPacientes(){
+    this.router.navigate(['pacientes']);
+  }
+
 
 }

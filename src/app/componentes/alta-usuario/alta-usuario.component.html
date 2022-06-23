@@ -112,7 +112,7 @@
                     </div>
                     <div *ngIf="paciente" class="mb-3">
                         <label for="img2Perfil">Imagen Perfil</label>
-                        <input type="file" class="form-control" id="img2Perfil" (change)="selectFile($event)"
+                        <input type="file" class="form-control" id="img2Perfil" (change)="selectFile2($event)"
                             formControlName="img2Perfil">
                         <span class="text-danger"
                             *ngIf="formulario.get('img2Perfil')?.hasError('required') && formulario.get('img2Perfil')?.touched">

@@ -11,5 +11,6 @@
         <app-lista-usuario [usuarios]="listaUsuarios" (usuarioSeleccionado)="mostrarDatosUsuarioSeleccionado($event)"></app-lista-usuario>
         
         <app-usuario-detalle *ngIf="mostrarDetalle" [usuarioDetalle]="usuarioElegido"></app-usuario-detalle>
+        <app-excel-turnos *ngIf="mostrarDetalle" [usuarioAMostrar]="usuarioElegido"></app-excel-turnos>
     </div>
 </div>

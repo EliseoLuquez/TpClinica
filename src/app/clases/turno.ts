@@ -1,3 +1,5 @@
+import { HistoriaClinica } from "./historia-clinica";
+
 export class Turno {
     id!: string;
     idEspecialista!: string;
@@ -11,7 +13,5 @@ export class Turno {
     comentariosPaciente!: string;
     comentariosEspecialista!: string;
     comentariosAdmin!: string;
-
-
-
+    historiaClinica!: HistoriaClinica;
 }

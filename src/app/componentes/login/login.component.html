@@ -29,8 +29,8 @@
   </div>
   <div class="container">
     <div class="row">
-      <div class="form-group col-2" *ngFor="let usuario of usuarios">
-        <button type="button" class="btn btn-lg btn-success" id="btnLogs" (click)="logUsuario(usuario)"><img id="imgBotonesLog" [src]="usuario.img1Url">
+      <div class="form-group col-2" *ngFor="let usuario of arrayUsuarios">
+        <button type="button" class="btn" id="btnLogs" (click)="logUsuario(usuario)"><img id="imgBotonesLog" [src]="usuario.img1Url" appNotImage>
         {{usuario.tipoUsuario}}</button>
       </div>
     </div>

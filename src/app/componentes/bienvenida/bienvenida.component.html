@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="visible" [@slideInOut]>
     <div class="row text-center">
         <img id="img" class="mb-4 pt-4" src="../../../assets/cruzVerde.jpg" alt="">
         <div *ngIf="!islogged ;else bienvenida">

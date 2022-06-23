@@ -21,6 +21,7 @@ export class AltaUsuarioComponent implements OnInit {
   img1Perfil!: Imagen;
   img2Perfil!: Imagen;
   selectedFiles!: FileList;
+  selectedFiles2!: FileList;
   percentage!: number;
   especialista = false;
   paciente = false;
@@ -49,7 +50,6 @@ export class AltaUsuarioComponent implements OnInit {
       img2Perfil: ["",]
     });
 
-    console.log(this.usuarioLog$);
     this.usuarioLog$.subscribe((result: any) => {
       if(result!= null)
       {
@@ -62,7 +62,7 @@ export class AltaUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarEspecialidades();
-    console.log(this.usuarioLog$);
+
   }
 
   resolved(captchaResponse: string){
@@ -91,14 +91,18 @@ export class AltaUsuarioComponent implements OnInit {
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
-    console.log(this.selectedFiles);
+
+
+  }
+  selectFile2(event: any): void {
+    this.selectedFiles2 = event.target.files;
+
 
   }
 
 
   async registrar() {
 
-    console.log(this.formulario);
     this.usuario = new Usuario();
     this.usuario.nombre = this.formulario.controls['nombre'].value;
     this.usuario.apellido = this.formulario.controls['apellido'].value;
@@ -143,10 +147,26 @@ export class AltaUsuarioComponent implements OnInit {
       //this.usuario.logueado = true;
       //this.usuario.fecha = new Date().toLocaleString();
       //await this.authSvc.enviarVerficacionEmail();
-      console.log(result.user.uid);
+
+     //console.log(this.authSvc.usuario.id);
       
-      this.usuario.id = result.user.uid;
-      this.usuarioSvc.addUsuario(this.usuario);
+      //this.usuario.id = this.authSvc.usuario.id;
+
+      //this.usuarioSvc.addUsuario(this.usuario);
+      const file1 = this.selectedFiles.item(0);
+      console.log(this.selectedFiles.item(0));
+      //this.selectedFiles = undefined;
+      if(file1 != null){
+        this.img1Perfil = new Imagen(file1);
+      }
+  
+      const file2 = this.selectedFiles2.item(0);
+      console.log(this.selectedFiles2.item(0));
+      if(file2 != null){
+        this.img2Perfil = new Imagen(file2);
+      }
+
+      this.usuarioSvc.addUsuario(this.usuario, this.img1Perfil, this.img2Perfil);
       this.msjError = "";
     })
       .catch((res) => {
@@ -157,30 +177,11 @@ export class AltaUsuarioComponent implements OnInit {
           this.msjError = "El formato del email no es correcto."
         }
       });
-
-    console.log(this.usuario);
-
-    const file1 = this.selectedFiles.item(0);
-    const file2 = this.selectedFiles.item(1);
-    //this.selectedFiles = undefined;
-    if(file1 != null){
-      this.img1Perfil = new Imagen(file1);
-    }
-    if(file2 != null){
-      this.img2Perfil = new Imagen(file2);
-    }
-    console.log(this.usuario);
-
-    //TODO: cambiar nombres de fotos porq no guarda la img si se llama igual
-    // this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.usuario).subscribe(
-    //   ( percentage: number) => {
-    //     this.percentage = Math.round(percentage);
-    //   },
-    //   ( error: any) => {
-    //     console.log(error);
-    //   }
-    // );
-    this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.img2Perfil, this.usuario);
+    
+      
+  
+      //this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.img2Perfil, this.usuario);
+   
 
     this.router.navigate(['ingreso/envio-email']);
   }
@@ -189,18 +190,14 @@ export class AltaUsuarioComponent implements OnInit {
   cargarEspecialidades() {
     this.usuarioSvc.getEspecialidades().subscribe((especialidades: any) => {
       this.especialidades = especialidades;
-      console.log(this.especialidades);
       
     });
   }
 
   asignarEspecialidadSeleccionada(especialidad: any){
-    console.log(especialidad.nombre);
-    ;
-  
+
     this.especialidadSeleccionada = especialidad;
     this.especialidadesSeleccionadas.push(this.especialidadSeleccionada.nombre);
-    console.log(this.especialidadesSeleccionadas)
     this.formulario.controls['especialidades'].setValue(this.especialidadesSeleccionadas);
   }
 

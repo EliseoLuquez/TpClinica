@@ -43,7 +43,7 @@ export class MisHorariosComponent implements OnInit {
 
    });
 
-   this.usuario = this.authSvc.usuario;
+   this.usuario = this.authSvc.usuarioLogueado;
 
 
  }

@@ -2,14 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { trigger, transition, animate, style } from '@angular/animations';
+
 
 @Component({
   selector: 'app-bienvenida',
   templateUrl: './bienvenida.component.html',
-  styleUrls: ['./bienvenida.component.css']
+  styleUrls: ['./bienvenida.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateY(-100%)'}),
+        animate('800ms ease-in', style({transform: 'translateY(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('800ms ease-in', style({transform: 'translateY(-100%)'}))
+      ])
+    ])
+  ]
 })
 export class BienvenidaComponent implements OnInit {
 
+  public visible:boolean=true;
   islogged = false;
   public usuario$: Observable<any> = this.authSvc.afAuth.user;
   

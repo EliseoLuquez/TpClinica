@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let turno of turnosPaciente | filterEspecialista: filter; index as i" (click)="asignarTurno(turno)">
+            <tr *ngFor="let turno of turnosPaciente | filterTurnos: filter; index as i" (click)="asignarTurno(turno)">
                 <th>{{i+1}}</th>
                 <td>{{turno.fecha}} - {{turno.hora}}</td>
                 <td>{{turno.paciente.nombre}} {{turno.paciente.apellido}}</td>
@@ -36,4 +36,8 @@
 
     <!-- <app-tabla-turnos [turnos]="turnosOcupados" (turnoSeleccionado)="asignarTurno($event)"></app-tabla-turnos> -->
     <app-turno-detalle *ngIf="turnoSeleccionado" [turnoDetalle]="turnoSeleccionado"></app-turno-detalle>
+    <br>
+    <div *ngIf="turnoSeleccionado && mostrarAltaHistoria">
+        <app-alta-historia-clinica *ngIf="turnoSeleccionado.estado == 'FINALIZADO'" [turno]="turnoSeleccionado"></app-alta-historia-clinica>
+    </div>
 </div>

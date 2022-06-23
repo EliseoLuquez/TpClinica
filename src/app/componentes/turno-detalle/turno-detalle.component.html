@@ -31,31 +31,18 @@
                         </div>
                     </div>
 
-
-                    <div *ngIf="turnoDetalle.estado == pendiente">
-                        <!-- <div *ngIf="turnoDetalle.estado != ACEPTADO || turnoDetalle.estado != RECHAZADO
-                                    || turnoDetalle.estado != REALIZADO; else deshabilitado">
-                            <h6>Estado: CANCELADO</h6>
-                        </div> -->
-                        <!-- <ng-template #deshabilitado>
-                            <h6>Estado: Deshabilitado</h6>
-                            <button class="btn btn-success" type="submit"
-                                (click)="habilitarEspecialista()">Habilitar</button>
-                        </ng-template> -->
-                    </div>
-                    
-                    <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'RECHAZADO'
-                    && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO'" class="form-group col-md-2">
-                        <button class="btn btn-warning mb-2" (click)="cancelar()">CANCELAR</button>
-                    </div>
-                    <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'CANCELADO'
-                    && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'RECHAZADO'" class="form-group col-md-2">
-                        <button class="btn btn-danger mb-2" (click)="rechazar()"
-                            *ngIf="usuario.especialista">RECHAZAR</button>
-                    </div>
-                    <div *ngIf="turnoDetalle.estado != 'RECHAZADO' && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO' && turnoDetalle.estado != 'ACEPTADO'">
-                        <button class="btn btn-success mb-2" (click)="aceptar()"
-                            *ngIf="usuario.especialista">ACEPTAR</button>
+                    <div *ngIf="turnoDetalle.estado == 'PENDIENTE'">
+                        <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'RECHAZADO' && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO'" class="form-group col-md-2">
+                            <button class="btn btn-warning mb-2" (click)="cancelar()">CANCELAR</button>
+                        </div>
+                        <div *ngIf="turnoDetalle.estado != 'ACEPTADO' && turnoDetalle.estado != 'CANCELADO' && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'RECHAZADO'" class="form-group col-md-2">
+                            <button class="btn btn-danger mb-2" (click)="rechazar()"
+                                *ngIf="usuario.especialista">RECHAZAR</button>
+                        </div>
+                        <div *ngIf="turnoDetalle.estado != 'RECHAZADO' && turnoDetalle.estado != 'REALIZADO' && turnoDetalle.estado != 'CANCELADO' && turnoDetalle.estado != 'ACEPTADO'">
+                            <button class="btn btn-success mb-2" (click)="aceptar()"
+                                *ngIf="usuario.especialista">ACEPTAR</button>
+                        </div>
                     </div>
                     <div *ngIf="turnoDetalle.estado == 'ACEPTADO' && turnoDetalle.estado != 'FINALIZADO'">
                         <button class="btn btn-primary mb-2" (click)="finalizar()"
@@ -65,28 +52,36 @@
                 <div *ngIf="usuario.especialista">
                     <h4 *ngIf="turnoDetalle.comentariosEspecialista != ''">Comentarios Especialista:
                         {{turnoDetalle.comentariosEspecialista}}</h4>
-                    <div *ngIf="cancela || rechaza || finaliza" class="form-group">
-                        <textarea *ngIf="usuario.especialista" class="form-control"
-                            [(ngModel)]="nuevoComentarioEspecialista" placeholder="Deje un comentario..."></textarea>
-                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
-                    </div>
+                    
+                        <div *ngIf="cancela || rechaza || finaliza" class="form-group">
+                            <div *ngIf="!noMostrarEnviarComentarioEsp">
+                                <textarea *ngIf="usuario.especialista" class="form-control"
+                                    [(ngModel)]="nuevoComentarioEspecialista" placeholder="Deje un comentario..."></textarea>
+                                <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                            </div>
+                        </div>
+                    
                 </div>
                 <div *ngIf="usuario.paciente">
                     <h4 *ngIf="turnoDetalle.comentariosPaciente != ''">Comentarios Paciente:
                         {{turnoDetalle.comentariosPaciente}}</h4>
                     <div *ngIf="cancela" class="form-group">
-                        <textarea *ngIf="usuario.paciente" class="form-control" [(ngModel)]="nuevoComentarioPaciente"
-                            placeholder="Deje un comentario..."></textarea>
-                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                        <div *ngIf="!noMostrarEnviarComentarioPac">
+                            <textarea *ngIf="usuario.paciente" class="form-control" [(ngModel)]="nuevoComentarioPaciente"
+                                placeholder="Deje un comentario..."></textarea>
+                            <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                        </div>
                     </div>
                 </div>
                 <div *ngIf="usuario.administrador">
                     <h4 *ngIf="turnoDetalle.comentariosAdmin != ''">Comentarios Administrador:
                         {{turnoDetalle.comentariosAdmin}}</h4>
                     <div *ngIf="cancela" class="form-group">
-                        <textarea *ngIf="usuario.administrador" class="form-control"
-                            [(ngModel)]="nuevoComentarioAdmin" placeholder="Deje un comentario..."></textarea>
-                        <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                        <div *ngIf="!noMostrarEnviarComentarioAdmin">
+                            <textarea *ngIf="usuario.administrador" class="form-control"
+                                [(ngModel)]="nuevoComentarioAdmin" placeholder="Deje un comentario..."></textarea>
+                            <button class="btn btn-success mb-2" (click)="enviarComentario()">Enviar</button>
+                        </div>
                     </div>
                 </div>
                 <!-- <div class="form-group col-8">

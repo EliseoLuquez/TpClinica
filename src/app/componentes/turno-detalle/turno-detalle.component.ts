@@ -30,13 +30,17 @@ export class TurnoDetalleComponent implements OnInit {
   cancela: boolean = false;
   rechaza: boolean = false;
   finaliza: boolean = false;
+  noMostrarEnviarComentarioEsp: boolean = false;
+  noMostrarEnviarComentarioPac: boolean = false;
+  noMostrarEnviarComentarioAdmin: boolean = false
+
 
   constructor(private turnoSvc: TurnoService, private authSvc: AuthService, private router: Router) {
     
    }
 
   ngOnInit(): void {
-    this.usuario = this.authSvc.usuario;
+    this.usuario = this.authSvc.usuarioLogueado;
     //this.obtenerUsuarioLogueado();
   }
 
@@ -91,14 +95,20 @@ export class TurnoDetalleComponent implements OnInit {
     if(this.usuario.especialista){
       this.turnoDetalle.comentariosEspecialista = this.nuevoComentarioEspecialista;
       this.turnoSvc.updateTurnoEstadoComentariosEspecialista(this.turnoDetalle);
+      this.noMostrarEnviarComentarioEsp = true;
+      this.nuevoComentarioEspecialista = "";
     }
     if(this.usuario.paciente){
       this.turnoDetalle.comentariosPaciente = this.nuevoComentarioPaciente;
       this.turnoSvc.updateTurnoEstadoComentariosPaciente(this.turnoDetalle);
+      this.noMostrarEnviarComentarioPac = true;
+      this.nuevoComentarioPaciente = "";
     }
     if(this.usuario.administrador){
       this.turnoDetalle.comentariosAdmin = this.nuevoComentarioAdmin;
       this.turnoSvc.updateTurnoEstadoComentariosAdmin(this.turnoDetalle);
+      this.noMostrarEnviarComentarioAdmin = true;
+      this.nuevoComentarioAdmin = "";
     }
 
     //this.turnoDetalle = null;
