@@ -11,20 +11,20 @@
          <th>Especialista</th>
          <th>Reseña</th>
       </tr>    
-      <tr *ngFor="let historia of listaHistoriaClinica" appAgranda>
+      <tr *ngFor="let turno of listaHistoriaClinica" appAgranda>
       
-         <td>{{ historia.turno.fecha }} {{historia.turno.hora }}</td>  
-         <td>{{ historia.turno.especialidad }}</td> 
-         <td>{{ historia.turno.especialista.nombre}} {{ historia.turno.especialista.apellido }}</td>
+         <td>{{ turno.fecha }} {{turno.hora }}</td>  
+         <td>{{ turno.especialidad.nombre }}</td> 
+         <td>{{ turno.especialista.nombre}} {{ turno.especialista.apellido }}</td>
          <td>
-            <div *ngIf="historia.turno.comentariosPaciente != ''">
-                {{ historia.turno.comentariosPaciente }}
+            <div *ngIf="turno.comentariosPaciente != ''">
+                {{ turno.comentariosPaciente }}
             </div>
-            <div *ngIf="historia.turno.comentariosEspecialista != ''">
-                {{ historia.turno.comentariosEspecialista }}
+            <div *ngIf="turno.comentariosEspecialista != ''">
+                {{ turno.comentariosEspecialista }}
             </div>
-            <div *ngIf="historia.turno.comentariosAdmin != ''">
-                {{ historia.turno.comentariosAdmin }}
+            <div *ngIf="turno.comentariosAdmin != ''">
+                {{ turno.comentariosAdmin }}
             </div>
         </td>
       </tr> 
