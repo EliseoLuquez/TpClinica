@@ -41,6 +41,7 @@ import { FilterTurnosPipe } from './pipes/filter-turnos.pipe';
 import { ExcelTurnpsComponent } from './componentes/excel-turnps/excel-turnps.component';
 import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
 import { NotImageDirective } from './directivas/not-image.directive';
+import { PdfEspecialistaComponent } from './componentes/pdf-especialista/pdf-especialista.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { NotImageDirective } from './directivas/not-image.directive';
     ExcelTurnpsComponent,
     EstadisticasComponent,
     NotImageDirective,
+    PdfEspecialistaComponent,
   ],
   imports: [
     BrowserModule,

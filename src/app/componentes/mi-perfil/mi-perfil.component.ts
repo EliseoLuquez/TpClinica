@@ -27,6 +27,7 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
   ]
   
 })
+
 export class MiPerfilComponent implements OnInit {
   usuarioPerfil: Usuario;
   public visible:boolean=true;

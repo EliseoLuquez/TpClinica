@@ -1,35 +1,34 @@
 import { Component, OnInit } from '@angular/core';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { map } from 'rxjs';
-import { HistoriaClinica } from 'src/app/clases/historia-clinica';
+import { Turno } from 'src/app/clases/turno';
 import { Usuario } from 'src/app/clases/usuario';
 import { AuthService } from 'src/app/services/auth.service';
-import { HistoriaClinicaService } from 'src/app/services/historia-clinica.service';
-import { jsPDF } from "jspdf";
-import html2canvas from 'html2canvas';
 import { TurnoService } from 'src/app/services/turno.service';
-import { Turno } from 'src/app/clases/turno';
 
 @Component({
-  selector: 'app-historia-clinica',
-  templateUrl: './historia-clinica.component.html',
-  styleUrls: ['./historia-clinica.component.css']
+  selector: 'app-pdf-especialista',
+  templateUrl: './pdf-especialista.component.html',
+  styleUrls: ['./pdf-especialista.component.css']
 })
-export class HistoriaClinicaComponent implements OnInit {
+export class PdfEspecialistaComponent implements OnInit {
 
   public mostrar: boolean = false;
-  public historiaSeleccionada: HistoriaClinica = new HistoriaClinica;
   public usuarioSeleccionado: Usuario = new Usuario;
   public listadoHistoriaClinica: any = [];
   public listaHistoriaClinica: any = [];
   usuario!: any;
 
-  constructor(public historiaClinicaService: HistoriaClinicaService, public authSvc: AuthService, private turnoSvc: TurnoService) {
+  constructor( public authSvc: AuthService, private turnoSvc: TurnoService) {
+    console.log("hola");
+    
     this.usuario = this.authSvc.usuarioLogueado;
     console.log(this.usuario);
   }
 
   ngOnInit(): void {
-    this.listadoHistoriaClinica = this.turnoSvc.db.collection("turnos", ref => ref.where('idPaciente', '==', this.usuario.id));
+    this.listadoHistoriaClinica = this.turnoSvc.db.collection("turnos", ref => ref.where('idEspecialista', '==', this.usuario.id));
     this.buscarHistoria();
     console.log(this.listaHistoriaClinica);
   }
@@ -65,7 +64,9 @@ export class HistoriaClinicaComponent implements OnInit {
           turno.historiaClinica.valor1 = item.payload.doc.data().historiaClinica.valor1;
           turno.historiaClinica.valor2 = item.payload.doc.data().historiaClinica.valor2;
           //turno.turnoId = turno.payload.doc.data().historiaClinica.turnoId;
-          this.listaHistoriaClinica.push(turno);
+          if(turno.estado == "FINALIZADO"){
+            this.listaHistoriaClinica.push(turno);
+          }
         })
       })
     ).subscribe((datos: any) => {
@@ -84,8 +85,9 @@ export class HistoriaClinicaComponent implements OnInit {
       let PDF = new jsPDF('p', 'mm', 'a4');
       let position = 0;
       PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight)
-      var nombreArchivo ='historia-clinica.pdf';
+      var nombreArchivo ='turnos-atendidos.pdf';
       PDF.save(nombreArchivo);
     });
   }
+
 }
