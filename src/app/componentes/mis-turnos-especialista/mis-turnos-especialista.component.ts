@@ -113,9 +113,17 @@ export class MisTurnosEspecialistaComponent implements OnInit {
     //   console.log(this.historias);
     
     this.turnoSeleccionado = turno;
-    console.log(this.turnoSeleccionado);
-    if(turno.historiaClinica.altura != ""){
+    console.log(this.turnoSeleccionado.historiaClinica);
+    console.log(turno.historiaClinica);
+    
+    if(turno.historiaClinica != ""){
+      console.log("oculto");
+      
       this.mostrarAltaHistoria = false;
+    }
+    else{
+      console.log("muestro");
+      this.mostrarAltaHistoria = true;
     }
   }
 
