@@ -10,5 +10,10 @@ export class HistoriaClinica {
     valor2!:string;
     clave3!:string;
     valor3!:string;
-    turnoId!:string;
+    clave4!:string;
+    valor4!:string;
+    clave5!:string;
+    valor5!:string;
+    clave6!:string;
+    valor6!:string;
 }

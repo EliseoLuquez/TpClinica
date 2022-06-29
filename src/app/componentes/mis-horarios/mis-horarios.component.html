@@ -1,4 +1,4 @@
-<form [formGroup]="formulario" (ngSubmit)="registrar()">
+<form [formGroup]="formulario" (ngSubmit)="registrar()" [@slideInOut]>
     <div class="container">
         <div class="row">
             <h4 class="mb-3 text-center">Alta Horarios</h4>
@@ -7,7 +7,7 @@
                     <div class="col-12 mb-3">
                         <label for="especialidad">Especialidad</label>
                         <select class="custom-select custom-select-lg form-control mb-3" formControlName="especialidad"
-                             [(ngModel)]="especialidad"> 
+                            [(ngModel)]="especialidad">
                             <option selected value="">Selecciona una opción</option>
                             <option *ngFor="let especialidad of usuarioHorarios.especialidades" [value]="especialidad">
                                 {{especialidad}}</option>
@@ -27,177 +27,142 @@
                                 <label for="lunes">Lunes</label>
                                 <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="lunesHoraDesde"
                                     formControlName="lunesHoraDesde">
-                                <span class="text-danger" *ngIf="formulario.get('lunesHoraDesde')?.hasError('horaValido')">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('lunesHoraDesde')?.hasError('horaValido')">
                                     El rango horario es de 9AM a 19PM.</span>
-                                <span class="text-danger" *ngIf="formulario.get('lunesHoraDesde')?.hasError('minValido')">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('lunesHoraDesde')?.hasError('minValido')">
                                     Los minutos permitidos son 00 o 30.</span>
-                                
-                                    <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="lunesHoraHasta"
+
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="lunesHoraHasta"
                                     formControlName="lunesHoraHasta">
-                                <span class="text-danger" *ngIf="formulario.get('lunesHoraHasta')?.hasError('horaValido')">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('lunesHoraHasta')?.hasError('horaValido')">
                                     El rango horario es de 9AM a 19PM.</span>
                                 <span class="text-danger" *ngIf="formulario.get('')?.hasError('minValido')">
                                     Los minutos permitidos son 00 o 30.</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="lunes">Martes</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="martesHoraDesde"
-                                    formControlName="martesHoraDesde">
-                                    <span class="text-danger" *ngIf="formulario.get('martesHoraDesde')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('martesHoraDesde')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="martesHoraDesde" formControlName="martesHoraDesde">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('martesHoraDesde')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('martesHoraDesde')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
 
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="martesHoraHasta"
-                                    formControlName="martesHoraHasta">
-                                    <span class="text-danger" *ngIf="formulario.get('martesHoraHasta')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('martesHoraHasta')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="martesHoraHasta" formControlName="martesHoraHasta">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('martesHoraHasta')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('martesHoraHasta')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="lunes">Miercoles</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="miercolesHoraDesde"
-                                    formControlName="miercolesHoraDesde">
-                                    <span class="text-danger" *ngIf="formulario.get('miercolesHoraDesde')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('miercolesHoraDesde')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="miercolesHoraDesde" formControlName="miercolesHoraDesde">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('miercolesHoraDesde')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('miercolesHoraDesde')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
 
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="miercolesHoraHasta"
-                                    formControlName="miercolesHoraHasta">
-                                    <span class="text-danger" *ngIf="formulario.get('miercolesHoraHasta')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('miercolesHoraHasta')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="miercolesHoraHasta" formControlName="miercolesHoraHasta">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('miercolesHoraHasta')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('miercolesHoraHasta')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="lunes">Jueves</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="juevesHoraDesde"
-                                    formControlName="juevesHoraDesde">
-                                    <span class="text-danger" *ngIf="formulario.get('juevesHoraDesde')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('juevesHoraDesde')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="juevesHoraDesde" formControlName="juevesHoraDesde">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('juevesHoraDesde')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('juevesHoraDesde')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
 
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="juevesHoraHasta"
-                                    formControlName="juevesHoraHasta">
-                                    <span class="text-danger" *ngIf="formulario.get('juevesHoraHasta')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('juevesHoraHasta')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="juevesHoraHasta" formControlName="juevesHoraHasta">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('juevesHoraHasta')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('juevesHoraHasta')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="lunes">Viernes</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="viernesHoraDesde"
-                                    formControlName="viernesHoraDesde">
-                                    <span class="text-danger" *ngIf="formulario.get('viernesHoraDesde')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('viernesHoraDesde')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="viernesHoraDesde" formControlName="viernesHoraDesde">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('viernesHoraDesde')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('viernesHoraDesde')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
 
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="viernesHoraHasta"
-                                    formControlName="viernesHoraHasta">
-                                    <span class="text-danger" *ngIf="formulario.get('viernesHoraHasta')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('viernesHoraHasta')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="viernesHoraHasta" formControlName="viernesHoraHasta">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('viernesHoraHasta')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 19PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('viernesHoraHasta')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
                             </div>
                             <div class="col-md-4">
                                 <label for="lunes">Sabado</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="sabadoHoraDesde"
-                                    formControlName="sabadoHoraDesde">
-                                    <span class="text-danger" *ngIf="formulario.get('sabadoHoraDesde')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 14PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('sabadoHoraDesde')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="sabadoHoraDesde" formControlName="sabadoHoraDesde">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('sabadoHoraDesde')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 14PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('sabadoHoraDesde')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
 
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="sabadoHoraHasta"
-                                    formControlName="sabadoHoraHasta">
-                                    <span class="text-danger" *ngIf="formulario.get('sabadoHoraHasta')?.hasError('horaValido')">
-                                        El rango horario es de 9AM a 14PM.</span>
-                                    <span class="text-danger" *ngIf="formulario.get('sabadoHoraHasta')?.hasError('minValido')">
-                                        Los minutos permitidos son 00 o 30.</span>
+                                <input type="time" min="8:00:00" max="19:00:00" class="form-control"
+                                    id="sabadoHoraHasta" formControlName="sabadoHoraHasta">
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('sabadoHoraHasta')?.hasError('horaValido')">
+                                    El rango horario es de 9AM a 14PM.</span>
+                                <span class="text-danger"
+                                    *ngIf="formulario.get('sabadoHoraHasta')?.hasError('minValido')">
+                                    Los minutos permitidos son 00 o 30.</span>
                             </div>
                         </div>
-                        
-                        <!-- <div class="col-md-6 mb-3">
-                                <label for="horaDesde">Hora Desde</label>
-                                <input type="time" min="8:00:00" max="19:00:00" class="form-control" id="horaDesde" formControlName="horaDesde">
-                                <span class="text-danger"
-                                    *ngIf="formulario.get('horaDesde')?.hasError('required')  && formulario.get('horaDesde')?.touched">
-                                    Debes ingresar la Hora Desde.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaDesde')?.hasError('horaValido')">
-                                    El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaDesde')?.hasError('minValido')">
-                                    Los minutos permitidos son 00 o 30.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaDesde')?.hasError('sabado')">
-                                    Los Sabados el horario es de 8 a 14.</span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="horaHasta">Hora Hasta</label>
-                                <input type="time" min="8" max="19" class="form-control" id="horaHasta" formControlName="horaHasta">
-                                <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('required')  && formulario.get('horaHasta')?.touched">
-                                    Debes ingresar la Hora Hasta.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('horaValido')">
-                                    El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('minValido')">
-                                    Los minutos permitidos son 00 o 30.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('sabado')">
-                                    Los Sabados el horario es de 8 a 14.</span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="horaHasta">Hora Hasta</label>
-                                <input type="time" min="8" max="19" class="form-control" id="horaHasta" formControlName="horaHasta">
-                                <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('required')  && formulario.get('horaHasta')?.touched">
-                                    Debes ingresar la Hora Hasta.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('horaValido')">
-                                    El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('minValido')">
-                                    Los minutos permitidos son 00 o 30.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('sabado')">
-                                    Los Sabados el horario es de 8 a 14.</span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="horaHasta">Hora Hasta</label>
-                                <input type="time" min="8" max="19" class="form-control" id="horaHasta" formControlName="horaHasta">
-                                <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('required')  && formulario.get('horaHasta')?.touched">
-                                    Debes ingresar la Hora Hasta.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('horaValido')">
-                                    El rango horario es de 9AM a 19PM.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('minValido')">
-                                    Los minutos permitidos son 00 o 30.</span>
-                                    <span class="text-danger"
-                                    *ngIf="formulario.get('horaHasta')?.hasError('sabado')">
-                                    Los Sabados el horario es de 8 a 14.</span>
-                            </div> -->
+
+
                     </div>
 
 
                 </div>
 
-
+                <div class="mb-3">
+                    <app-captcha (resultadoCaptcha)="resolvedPropio($event)"></app-captcha>
+                </div>
                 <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit"
-                    [disabled]="formulario.invalid">Registrar</button>
+                <div [hidden]="!captchaPropio">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit"
+                        [disabled]="formulario.invalid">Registrar</button>
+                </div>
             </div>
+
         </div>
     </div>
 </form>

@@ -42,6 +42,16 @@ import { ExcelTurnpsComponent } from './componentes/excel-turnps/excel-turnps.co
 import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
 import { NotImageDirective } from './directivas/not-image.directive';
 import { PdfEspecialistaComponent } from './componentes/pdf-especialista/pdf-especialista.component';
+import { EstadoDirective } from './directivas/estado.directive';
+import { LogIngresosComponent } from './componentes/log-ingresos/log-ingresos.component';
+import { TurnosPorEspecialistaComponent } from './componentes/turnos-por-especialista/turnos-por-especialista.component';
+import { TurnosPorDiaComponent } from './componentes/turnos-por-dia/turnos-por-dia.component';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { CaptchaDirective } from './directivas/captcha.directive';
+import { CaptchaComponent } from './componentes/captcha/captcha.component';
+import { CantTurnosPorEspecialidadComponent } from './componentes/cant-turnos-por-especialidad/cant-turnos-por-especialidad.component';
+import { ResaltarDirective } from './directivas/resaltar.directive';
+import { TurnosFinalizadosComponent } from './componentes/turnos-finalizados/turnos-finalizados.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +89,15 @@ import { PdfEspecialistaComponent } from './componentes/pdf-especialista/pdf-esp
     EstadisticasComponent,
     NotImageDirective,
     PdfEspecialistaComponent,
+    EstadoDirective,
+    LogIngresosComponent,
+    TurnosPorEspecialistaComponent,
+    TurnosPorDiaComponent,
+    CaptchaDirective,
+    CaptchaComponent,
+    CantTurnosPorEspecialidadComponent,
+    ResaltarDirective,
+    TurnosFinalizadosComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +109,8 @@ import { PdfEspecialistaComponent } from './componentes/pdf-especialista/pdf-esp
     ReactiveFormsModule,
     BrowserAnimationsModule,
     IngresoModule,
-    RecaptchaModule
+    RecaptchaModule,
+    HighchartsChartModule
     
   ],
   providers: [],

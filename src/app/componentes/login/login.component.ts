@@ -84,6 +84,8 @@ export class LoginComponent implements OnInit {
         if (this.authSvc.msjError != "") {
           this.msjError = this.authSvc.msjError;
         }
+
+        this.usuarioSvc.addLogIngresos(this.usuario.email);
     })
     .catch((res)=>{
       if(res.message == "The password is invalid or the user does not have a password."){

@@ -6,11 +6,23 @@ import { Usuario } from 'src/app/clases/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { HorariosService } from 'src/app/services/horarios.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { trigger, transition, animate, style, state, group } from '@angular/animations';
 
 @Component({
   selector: 'app-mis-horarios',
   templateUrl: './mis-horarios.component.html',
-  styleUrls: ['./mis-horarios.component.css']
+  styleUrls: ['./mis-horarios.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateX(-100%)'}),
+        animate('2000ms ease-in', style({transform: 'translateX(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({transform: 'translateX(-100%)'}))
+      ])
+    ])
+  ]
 })
 export class MisHorariosComponent implements OnInit {
 
@@ -24,6 +36,7 @@ export class MisHorariosComponent implements OnInit {
  horarios!: any;
  usuario: Usuario = new Usuario();
  horariosUsuario!: any;
+ captchaPropio:boolean = false;
 
  constructor(public fv: FormBuilder, private usuarioSvc: UsuarioService, private authSvc: AuthService) {
    this.formulario = fv.group({
@@ -150,6 +163,9 @@ export class MisHorariosComponent implements OnInit {
    this.formulario.reset();
  }
 
+ resolvedPropio(captcha: boolean){
+  this.captchaPropio = captcha;
+}
 
 
 }

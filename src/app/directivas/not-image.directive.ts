@@ -9,7 +9,7 @@ export class NotImageDirective {
   constructor(private elementImg: ElementRef) { }
   @HostListener('error')
   onError():void{
-    this.elementImg.nativeElement.src = "../../assets/imgdefault.png"
+    this.elementImg.nativeElement.src = "../../assets/imagenNoEncontrada.jpg";
   }
 
 

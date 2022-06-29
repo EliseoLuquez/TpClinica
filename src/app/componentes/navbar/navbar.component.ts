@@ -109,5 +109,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['pacientes']);
   }
 
-
+  goInformes(){
+    this.router.navigate(['informes']);
+  }
 }

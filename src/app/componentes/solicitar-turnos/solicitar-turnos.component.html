@@ -30,7 +30,10 @@
     </div>
 
 </div>
-<div class="container">
+<div class="mb-3">
+    <app-captcha (resultadoCaptcha)="resolvedPropio($event)"></app-captcha>
+</div>
+<div class="container"  [hidden]="!captchaPropio">
     <div class="row">
         <div class="col-12">
             <button class="btn btn-success" (click)="registrarTurno()">Enviar Turno</button>

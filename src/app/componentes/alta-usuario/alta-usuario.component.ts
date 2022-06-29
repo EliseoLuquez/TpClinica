@@ -32,7 +32,8 @@ export class AltaUsuarioComponent implements OnInit {
   especialidadSeleccionada: any = [];
   especialidadesSeleccionadas: any = [];
   captcha!: string;
-  //usuarios = [];
+  captchaPropio:boolean = false;
+  deshabilitado:boolean = false;
 
   constructor(public fv: FormBuilder, private authSvc: AuthService, private usuarioSvc: UsuarioService, private router: Router) {
     this.captcha = "";
@@ -67,6 +68,11 @@ export class AltaUsuarioComponent implements OnInit {
 
   resolved(captchaResponse: string){
     this.captcha = captchaResponse;
+  }
+
+  resolvedPropio(captcha: boolean){
+    this.captchaPropio = captcha;
+    this.deshabilitado = captcha;
   }
 
   getTipoUsuarioAdmin() {
@@ -167,6 +173,8 @@ export class AltaUsuarioComponent implements OnInit {
       }
 
       this.usuarioSvc.addUsuario(this.usuario, this.img1Perfil, this.img2Perfil);
+      console.log(this.usuario);
+      
       this.msjError = "";
     })
       .catch((res) => {
@@ -201,103 +209,5 @@ export class AltaUsuarioComponent implements OnInit {
     this.formulario.controls['especialidades'].setValue(this.especialidadesSeleccionadas);
   }
 
-  //   validarEspecialista(control: AbstractControl){
-  //     const especialista = control.value;
-  //     const 
-  //   } 
-  //   validarNombre(control: AbstractControl){
-  //     const nombre = control.value;
-  //     const tieneEspacio = nombre.includes(' ');
-  //     if(tieneEspacio){
-  //       return { tieneEspacio: true };
-  //     }
-  //     return null;
-  //   }
-  // @Output() usuario!: Usuario;
-  // formulario!: FormGroup;
-  // img1Perfil!: Imagen;
-  // selectedFiles!: FileList;
-  // percentage!: number;
-  // msjError!: string;
-
-  // constructor(public fv: FormBuilder, private authSvc: AuthService, private usuarioSvc: UsuarioService, private router: Router) {
-  //   this.formulario = fv.group({
-  //     nombre: ["", Validators.required],
-  //     apellido: ["", Validators.required],
-  //     edad: ["", [Validators.required, Validators.min(18), Validators.max(99)]],
-  //     dni: ["", Validators.required],
-  //     email: ["", [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-  //     password: ["", Validators.required],
-  //     img1Perfil: ["", Validators.required]
-  //   });
-  // }
-  
-  // ngOnInit(): void {
-  // }
-
-  // async registrar() {
-
-  //   console.log(this.formulario);
-  //   this.usuario = new Usuario();
-  //   this.usuario.nombre = this.formulario.controls['nombre'].value;
-  //   this.usuario.apellido = this.formulario.controls['apellido'].value;
-  //   this.usuario.edad = this.formulario.controls['edad'].value;
-  //   this.usuario.DNI = this.formulario.controls['dni'].value;
-  //   this.usuario.email = this.formulario.controls['email'].value;
-  //   this.usuario.password = this.formulario.controls['password'].value;
-  //   this.usuario.tipoUsuario = "Administrador";
-  //   this.usuario.obraSocial = "";
-  //   this.usuario.especialidad = "";
-  //   this.usuario.administrador = true;
-  //   this.usuario.especialista = false;
-  //   this.usuario.paciente = false;
-  //   this.usuario.habilitado = true;
-  
-
-  //   this.authSvc.registro(this.usuario).then(async (result) => {
-  //     //this.usuario.logueado = true;
-  //     //this.usuario.fecha = new Date().toLocaleString();
-  //     //await this.authSvc.enviarVerficacionEmail();
-  //     this.msjError = "";
-  //   })
-  //     .catch((res) => {
-  //       if (res.message == "The email address is already in use by another account.") {
-  //         this.msjError = "El email ingresado ya esta en uso."
-  //       }
-  //       if (res.message == "The email address is badly formatted.") {
-  //         this.msjError = "El formato del email no es correcto."
-  //       }
-  //     });
-
-  //   console.log(this.usuario);
-
-  //   const file1 = this.selectedFiles.item(0);
-  //   const file2 = this.selectedFiles.item(1);
-  //   //this.selectedFiles = undefined;
-  //   if(file1 != null)
-  //   {
-  //     this.img1Perfil = new Imagen(file1);
-  //   }
-    
-  //   console.log(this.usuario);
-
-  //   //TODO: cambiar nombres de fotos porq no guarda la img si se llama igual
-  //   this.usuarioSvc.uploadUsuarioImg(this.img1Perfil, this.usuario).subscribe(
-  //     percentage => {
-  //       this.percentage = Math.round(percentage);
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     }
-  //   );
-
-  //   this.router.navigate(['ingreso/envio-email']);
-  // }
-
-  // selectFile(event: any): void {
-  //   this.selectedFiles = event.target.files;
-  //   console.log(this.selectedFiles);
-
-  // }
-
+ 
 }

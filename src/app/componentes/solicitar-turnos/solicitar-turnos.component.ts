@@ -39,6 +39,7 @@ export class SolicitarTurnosComponent implements OnInit {
   email!: string;
   paciente!: any;
   administrador!: any;
+  captchaPropio:boolean = false;
 
 
   constructor(private usuarioSvc: UsuarioService, private authSvc: AuthService, private turnoSvc: TurnoService, private router: Router) {
@@ -327,29 +328,7 @@ export class SolicitarTurnosComponent implements OnInit {
         }
         this.turnosDisponibles.push(element);
       }
-      // this.fechas.forEach(fecha => {
-      //   fechaDis = fecha.row_date.day + "/" + fecha.row_date.month + "/" + fecha.row_date.year;
-
-      //   if (turno.fecha == fechaDis) {
-      //     console.log("fechaDis " + fechaDis);
-      //     console.log("fecha turno ocupado " + turno.fecha);
-      //     console.log(fecha.row_date.hours);
-
-      //     for (let index = 0; index < fecha.row_date.hours.length; index++) {
-      //       const element = fecha.row_date.hours[index];
-      //       if (element == turno.hora) {
-      //         console.log("element: " + element + "hora ocupada:  " + turno.hora + " en fecha   " + fechaDis);
-
-      //         //fecha.row_date.hours.splice(fecha.row_date.hours[index], 1);
-      //         fecha.row_date.hours[index] = null;
-      //         //fecha.row_date.hours[index] = fecha.row_date.hours[index].replace(element, "")
-      //         console.log("horario eliminado   " + element);
-      //         console.log(fecha.row_date.hours[index]);
-      //       }
-      //     }
-      //   }
-      //   this.turnosDisponibles.push(fecha);
-      // });
+ 
 
     });
     //console.log(this.turnosDisponibles);
@@ -364,5 +343,9 @@ export class SolicitarTurnosComponent implements OnInit {
 
   }
 
+  resolvedPropio(captcha: boolean){
+    this.captchaPropio = captcha;
+  }
+  
 
 }

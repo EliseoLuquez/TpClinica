@@ -11,7 +11,7 @@
          <th>Paciente</th>
          <th>Reseña</th>
       </tr>    
-      <tr *ngFor="let turno of listaHistoriaClinica" appAgranda>
+      <tr *ngFor="let turno of listaHistoriaClinica">
       
          <td>{{ turno.fecha }} {{turno.hora }}</td>  
          <td>{{ turno.especialidad.nombre }}</td> 
@@ -30,4 +30,4 @@
       </tr> 
     </table>
   </div>
-  <button type="button" class="btn btn-danger" appPosicion (click)="crearPdf()">Descargar pdf</button> 
+  <button type="button" class="btn btn-danger" (click)="crearPdf()">Descargar pdf</button> 

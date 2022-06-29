@@ -13,13 +13,15 @@ export class TurnoService {
 
   turnosCollection!: AngularFirestoreCollection;
   turnos!: Observable<Turno[]>;
+  turnosPorEspecialidad: Array<any> = [];
+  cantTurnosPorEspecialidad: any;
 
   constructor(public db: AngularFirestore) { 
     this.cargarTurnos()
   }
 
   cargarTurnos() {
-    this.turnosCollection = this.db.collection(this.dbPathTurnos);
+    this.turnosCollection = this.db.collection(this.dbPathTurnos, ref => ref.orderBy('fecha'));
     this.turnos = this.turnosCollection.snapshotChanges()
       .pipe(map(actions => {
         return actions.map(a => {
@@ -86,6 +88,23 @@ export class TurnoService {
     
     tutorialsRef.doc(turnoId).update({historiaClinica: Object.assign({}, historia)});
   }
+
+  getTurnosByEspecialidad(especialidad: string){
+    return this.db.collection<any>("turnos", ref => ref.where('especialidad.nombre', '==', especialidad)).valueChanges({idField: "id"});
+  }
+
+  // async getTurnoscantidadByEspecialidad(especialidad: string):Promise<any>{
+  //    const registros = await this.db.collection("turnos", ref => ref.where('especialidad.nombre', '==', especialidad)).get();
+  //   console.log(registros.);
+    
+  // }
+
+
+  getTurnosPorDia(){
+    return this.db.collection<any>("turnos").valueChanges({idField: "id"});
+  }
+
+  
 }
 
 

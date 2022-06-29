@@ -13,7 +13,9 @@ export class UsuarioService {
   //public usuario$: Observable<any> = this.authSvc.afAuth.user;
   dbPathUsuarios: string = "usuariosClinica";
   dbPathEspecialidades: string = "especialidades";
+  dbPathLogs: string = "logIngresosClinica";
 
+  logIngresosCollection: Array<any> = [];
   usuariosCollection!: AngularFirestoreCollection;
   usuarios!: Observable<Usuario[]>;
   usuariosLog: any[] = [];
@@ -141,7 +143,7 @@ export class UsuarioService {
             tutorialsRef.doc(id).update({ img1Nombre: img1.file.name, img1Url: img1.url });
           //this.updateUsuarioImg(usuario.email, { img1Nombre: img1.file.name, img1Url: img1.url });
           //img1.nombre = img1.file.name;
-          //this.addUsuario(usuario, img1);
+          //this.addUsuario(usuario, img1, img2);
         });
       })
     ).subscribe();
@@ -282,35 +284,23 @@ export class UsuarioService {
     return this.especialidades;
   }
 
-  // private dbPath: string = '/usuarios';
-  // public usuario: Usuario = new Usuario();
-  // usuariosRef!: AngularFirestoreCollection<any>;
-  // usuarioData: any;
-  // userMail!: string;
-  // usuarios!: Observable<any[]>;
+  addLogIngresos(email: string) {
+    console.log(this.usuariosCollection);
+    var fecha = new Date();
+    this.db.collection(this.dbPathLogs).add({
+      email: email,
+      fecha: fecha.toLocaleDateString(),
+      hora: fecha.toLocaleTimeString()
+    });
+  }
 
-  // constructor(private firestoreDb: AngularFirestore) {
-  //   this.usuariosRef = firestoreDb.collection<any>(this.dbPath);
-  //   this.getUsuarios();
-  // }
+  getCollection(collection: string){
+    return this.db.collection<any>(collection).valueChanges({idField: "id"});
+  }
 
-  // getUsuarios() {
-  //   this.usuarios = this.usuariosRef.snapshotChanges().pipe(
-  //     map(actions => actions.map(a => a.payload.doc.data() as any))
-  //   )
-  // }
-
-  // getUsuarioById(id: string) {
-  //   let usuarioRef = this.firestoreDb.collection(this.dbPath, ref => ref.where(id, '==', 'id'));
-  //   return usuarioRef;
-  // }
-
-  // registrarUsuario(usuario: any, id: string) {
-  //   this.usuariosRef.add(
-  //     {
-  //       email: usuario.email,
-  //       fecha: new Date().toLocaleString(),
-  //       id: id
-  //     });
-  // }
+  getEspecialistas(){
+    return this.db.collection<any>(this.dbPathUsuarios, ref => ref.where('especialista', '==', true)).valueChanges({idField: "id"});
+  }
+  
+  
 }

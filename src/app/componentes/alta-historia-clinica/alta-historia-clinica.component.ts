@@ -18,6 +18,7 @@ export class AltaHistoriaClinicaComponent implements OnInit {
   //TurnoSeleccionado!: any;
   orderObj!: any;
   //public Turno: any;
+  captchaPropio:boolean = false;
 
   @Input() TurnoAMostrar: any = "";
   
@@ -31,6 +32,14 @@ export class AltaHistoriaClinicaComponent implements OnInit {
       Valor1: ["", Validators.required],
       Clave2: ["", Validators.required],
       Valor2: ["", Validators.required],
+      Clave3: [""],
+      Valor3: [""],
+      Clave4: [""],
+      Valor4: [""],
+      Clave5: [""],
+      Valor5: [""],
+      Clave6: [""],
+      Valor6: [""],
 
     })
     //this.turnosOcupados = this.turnoSvc.db.collection("turnos", ref => ref.where('idEspecialista', '==', this.usuario.id));
@@ -67,6 +76,14 @@ export class AltaHistoriaClinicaComponent implements OnInit {
     historia.valor1 = this.formulario.controls['Valor1'].value;
     historia.clave2 = this.formulario.controls['Clave2'].value;
     historia.valor2 = this.formulario.controls['Valor2'].value;
+    historia.clave3 = this.formulario.controls['Clave3'].value;
+    historia.valor3 = this.formulario.controls['Valor3'].value;
+    historia.clave4 = this.formulario.controls['Clave4'].value;
+    historia.valor4 = this.formulario.controls['Valor4'].value;
+    historia.clave5 = this.formulario.controls['Clave5'].value;
+    historia.valor5 = this.formulario.controls['Valor5'].value;
+    historia.clave6 = this.formulario.controls['Clave6'].value;
+    historia.valor6 = this.formulario.controls['Valor6'].value;
     //historia.turnoId = this.turno.id;
     console.log(this.formulario.value);
 
@@ -74,6 +91,12 @@ export class AltaHistoriaClinicaComponent implements OnInit {
     this.formulario.reset();
 
     this.turnoSvc.updateTurnoHistoriaClinica(historia, this.turno.id);
+  }
+  
+
+  resolvedPropio(captcha: boolean){
+    this.captchaPropio = captcha;
+    //this.deshabilitado = captcha;
   }
 
 }

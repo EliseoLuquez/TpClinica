@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [@fadeInOut]>
     <div class="row">
         <div class="col-12">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -21,7 +21,7 @@
                             <button class="btn btn-success" type="submit"
                                 (click)="habilitarEspecialista()">Habilitar</button>
                         </ng-template>
-
+                        {{usuarioDetalle.img2Url}}
                     </div>
                 </div>
                 <div class="form-group col-8">
@@ -29,8 +29,8 @@
                         <div class="form-group col-md-4">
                             <img [src]="usuarioDetalle.img1Url">
                         </div>
-                        <div class="form-group col-md-4">
-                            <img [src]="usuarioDetalle.img2Url" *ngIf="usuarioDetalle.img2Url">
+                        <div class="form-group col-md-4" *ngIf="usuarioDetalle.img2Url != ''">
+                            <img [src]="usuarioDetalle.img2Url" >
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
+import { HistoriaClinica } from 'src/app/clases/historia-clinica';
 import { Turno } from 'src/app/clases/turno';
 import { Usuario } from 'src/app/clases/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { TurnoService } from 'src/app/services/turno.service';
+import { trigger, transition, animate, style, state, group } from '@angular/animations';
 
 @Component({
   selector: 'app-turnos',
   templateUrl: './turnos.component.html',
-  styleUrls: ['./turnos.component.css']
+  styleUrls: ['./turnos.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateY(-100%)'}),
+        animate('1000ms ease-in', style({transform: 'translateY(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({transform: 'translateY(-100%)'}))
+      ])
+    ])
+  ]
 })
 export class TurnosComponent implements OnInit {
 
@@ -57,6 +70,7 @@ export class TurnosComponent implements OnInit {
               turno.comentariosPaciente = item.payload.doc.data().comentariosPaciente;
               turno.comentariosEspecialista = item.payload.doc.data().comentariosEspecialista;
               turno.comentariosAdmin = item.payload.doc.data().comentariosAdmin;
+              turno.historiaClinica = new HistoriaClinica();
               this.turnos.push(turno);
 
         })

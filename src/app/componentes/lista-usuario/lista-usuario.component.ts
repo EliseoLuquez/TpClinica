@@ -1,11 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Usuario } from 'src/app/clases/usuario';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { trigger, transition, animate, style, state, group } from '@angular/animations';
 
 @Component({
   selector: 'app-lista-usuario',
   templateUrl: './lista-usuario.component.html',
-  styleUrls: ['./lista-usuario.component.css']
+  styleUrls: ['./lista-usuario.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateX(-100%)'}),
+        animate('2000ms ease-in', style({transform: 'translateX(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in', style({transform: 'translateX(-100%)'}))
+      ])
+    ])
+  ]
 })
 export class ListaUsuarioComponent implements OnInit {
 

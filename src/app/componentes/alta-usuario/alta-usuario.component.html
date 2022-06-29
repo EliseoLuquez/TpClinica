@@ -120,12 +120,14 @@
                     </div>
                     <hr class="mb-4">
 
-                    <div class="mb-3" [hidden]="captcha">
-                        <re-captcha (resolved)="resolved($event)" siteKey="6Le_1XcgAAAAACXfLCDwS5fSlDd4wCyuZzo0KCUp"></re-captcha>
+                    <div class="mb-3">
+                        <app-captcha (resultadoCaptcha)="resolvedPropio($event)"></app-captcha>
+                        <!-- <app-captcha (resultadoCaptcha)="resolvedPropio($event)"></app-captcha> -->
+                        <!-- <re-captcha (resolved)="resolved($event)" siteKey="6Le_1XcgAAAAACXfLCDwS5fSlDd4wCyuZzo0KCUp"></re-captcha> -->
                         <!-- <div class="g-recaptcha" data-sitekey="6Le_1XcgAAAAACXfLCDwS5fSlDd4wCyuZzo0KCUp"></div> -->
                     </div>
                     
-                    <div [hidden]="!captcha">
+                    <div [hidden]="!captchaPropio">
                         <button class="btn btn-primary btn-lg btn-block" type="submit"
                             [disabled]="formulario.invalid">Registrarse</button>
                         <div *ngIf="img1Perfil && img2Perfil" class="progress mt-2">
@@ -134,6 +136,7 @@
                                 [ngStyle]="{ width: percentage + '%' }">{{percentage}}%
                             </div>
                     </div>
+                   
                         <!-- <div class="progress-bar">role="progressbar"percentage %</div> -->
                         <!-- <ngb-progressbar [value]="percentage" type="success" [showValue]="true">{{ percentage }}%
                     </ngb-progressbar> -->

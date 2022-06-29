@@ -23,8 +23,9 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
       transition(':leave', [
         animate('0.3s ease-out', style({ transform: 'translateX(100%)' }))
       ])
-    ])
+    ]),
   ]
+  
   
 })
 
