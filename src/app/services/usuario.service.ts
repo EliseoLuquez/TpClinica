@@ -39,8 +39,8 @@ export class UsuarioService {
 
 
   addUsuario(usuario: Usuario, img1: Imagen, img2: Imagen) {
-    console.log(this.usuariosCollection);
-    this.usuariosCollection.add({
+    console.log(usuario);
+    this.db.collection(this.dbPathUsuarios).add({
       id: "",
       nombre: usuario.nombre,
       apellido: usuario.apellido,
@@ -50,15 +50,16 @@ export class UsuarioService {
       password: usuario.password,
       tipoUsuario: usuario.tipoUsuario,
       obraSocial: usuario.obraSocial,
-      especialidad: usuario.especialidades,
+      especialidades: usuario.especialidades,
       administrador: usuario.administrador,
-      especilista: usuario.especialista,
+      especialista: usuario.especialista,
       paciente: usuario.paciente,
       img1Nombre: "",
       img1Url: "",
       img2Nombre: "",
       img2Url: "",
-      horarios: ""
+      horarios: "",
+      habilitado: usuario.habilitado
     }).then(result => {
       console.log(result);
       

@@ -122,7 +122,7 @@ export class AltaUsuarioComponent implements OnInit {
       this.usuario.obraSocial = "";
     }
     //this.usuario.especialidades = this.formulario.controls['especialidades'].value;
-    this.usuario.especialidades = this.especialidadesSeleccionadas;
+    
     this.usuario.administrador = this.administrador;
     this.usuario.especialista = this.especialista;
     this.usuario.paciente = this.paciente;
@@ -140,6 +140,9 @@ export class AltaUsuarioComponent implements OnInit {
     if (this.usuario.paciente || this.usuario.administrador) {
       this.usuario.especialidades = [];
     }
+    else{
+      this.usuario.especialidades = this.formulario.controls['especialidades'].value;
+    }
 
     if (this.usuario.especialista) {
       this.usuario.habilitado = false;
@@ -148,8 +151,22 @@ export class AltaUsuarioComponent implements OnInit {
     else {
       this.usuario.habilitado = true;
     }
+    const file1 = this.selectedFiles.item(0);
+    console.log(this.selectedFiles.item(0));
+    //this.selectedFiles = undefined;
+    if(file1 != null){
+      this.img1Perfil = new Imagen(file1);
+    }
 
-    this.authSvc.registro(this.usuario).then(async (result) => {
+    if(this.usuario.paciente){
+      const file2 = this.selectedFiles2.item(0);
+      console.log(this.selectedFiles2.item(0));
+      if(file2 != null){
+        this.img2Perfil = new Imagen(file2);
+      }
+    }
+
+    this.authSvc.registro(this.usuario, this.img1Perfil, this.img2Perfil).then((result) => {
       //this.usuario.logueado = true;
       //this.usuario.fecha = new Date().toLocaleString();
       //await this.authSvc.enviarVerficacionEmail();
@@ -159,23 +176,14 @@ export class AltaUsuarioComponent implements OnInit {
       //this.usuario.id = this.authSvc.usuario.id;
 
       //this.usuarioSvc.addUsuario(this.usuario);
-      const file1 = this.selectedFiles.item(0);
-      console.log(this.selectedFiles.item(0));
-      //this.selectedFiles = undefined;
-      if(file1 != null){
-        this.img1Perfil = new Imagen(file1);
-      }
+      if(result.user){
+       
   
-      const file2 = this.selectedFiles2.item(0);
-      console.log(this.selectedFiles2.item(0));
-      if(file2 != null){
-        this.img2Perfil = new Imagen(file2);
+        console.log(this.usuario);
+        //this.usuarioSvc.addUsuario(this.usuario, this.img1Perfil, this.img2Perfil);
+        
+        this.msjError = "";
       }
-
-      this.usuarioSvc.addUsuario(this.usuario, this.img1Perfil, this.img2Perfil);
-      console.log(this.usuario);
-      
-      this.msjError = "";
     })
       .catch((res) => {
         if (res.message == "The email address is already in use by another account.") {

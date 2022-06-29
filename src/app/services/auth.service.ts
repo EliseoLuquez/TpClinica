@@ -4,6 +4,7 @@ import { Usuario } from '../clases/usuario';
 import { UsuarioService } from './usuario.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { map, Observable } from 'rxjs';
+import { Imagen } from '../clases/imagen';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,8 @@ export class AuthService {
           usuario.email = item.payload.doc.data().email;
           usuario.password = item.payload.doc.data().password;
           usuario.obraSocial = item.payload.doc.data().obraSocial;
+          console.log(item.payload.doc.data().especialidades);
+          
           usuario.especialidades = item.payload.doc.data().especialidades;
           usuario.administrador = item.payload.doc.data().administrador;
           usuario.paciente = item.payload.doc.data().paciente;
@@ -64,6 +67,8 @@ export class AuthService {
           this.usuariosLista.push(usuario);
           if(usuario.email == this.email){
             this.usuarioLogueado = usuario;
+            console.log(usuario);
+            
           }
         })
       })
@@ -106,17 +111,19 @@ export class AuthService {
   }
 
   //register
-  async registro(usuario: Usuario): Promise<any> {
+  async registro(usuario: Usuario, img1: Imagen, img2: Imagen): Promise<any> {
 
-    try {
-      var result = await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password);
-      result.user?.sendEmailVerification();
-      return result;
-    }
-    catch (error) {
-      console.log(error);
+  
+      return await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password).then((result) => {
+        this.msjError = "";
+  
+        if(result.user){
+          result.user?.sendEmailVerification();
+          this.usuarioSvc.addUsuario(usuario, img1, img2);
+        }
+      });
 
-    }
+
     // return await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.password).then((result) => {
     //   this.msjError = "";
     //   result.user?.sendEmailVerification();
